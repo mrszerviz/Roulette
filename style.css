@@ -3,14 +3,9 @@ body{
 margin:0;
 
 background:
-radial-gradient(
-circle,
-#19833d,
-#001b09
-);
+radial-gradient(circle,#147a38,#001b08);
 
-font-family:
-Arial;
+font-family:Arial;
 
 color:white;
 
@@ -34,45 +29,40 @@ padding:20px;
 
 .casino-table{
 
-
 background:
-
 linear-gradient(
 145deg,
 #075522,
-#002b12
+#002b10
 );
 
 
 padding:40px;
 
-border-radius:50px;
+border-radius:40px;
 
 
 box-shadow:
 
 0 50px 100px black,
-inset 0 0 50px #000;
-
+inset 0 0 50px black;
 
 
 transform:
-
-perspective(1000px)
-rotateX(12deg);
+perspective(900px)
+rotateX(10deg);
 
 
 }
 
 
 
-
 #wheel{
 
 
-width:320px;
+width:300px;
 
-height:320px;
+height:300px;
 
 
 margin:auto;
@@ -124,24 +114,21 @@ red 330deg 360deg
 );
 
 
-
 border:
 
-15px solid gold;
-
-
-box-shadow:
-
-0 30px 60px black,
-
-inset 0 0 40px white;
+12px solid gold;
 
 
 display:flex;
 
+justify-content:center;
+
 align-items:center;
 
-justify-content:center;
+
+box-shadow:
+
+0 30px 60px black;
 
 
 transition:
@@ -156,33 +143,27 @@ transform 5s cubic-bezier(.15,.8,.2,1);
 #resultNumber{
 
 
-width:100px;
+width:90px;
 
-height:100px;
+height:90px;
 
 
 border-radius:50%;
 
 
-background:
-
-radial-gradient(
-white,
-gray
-);
-
+background:white;
 
 color:black;
 
 
 display:flex;
 
-align-items:center;
-
 justify-content:center;
 
+align-items:center;
 
-font-size:45px;
+
+font-size:40px;
 
 
 box-shadow:
@@ -194,47 +175,8 @@ box-shadow:
 
 
 
-#ball{
 
-position:absolute;
-
-width:25px;
-
-height:25px;
-
-background:white;
-
-border-radius:50%;
-
-
-}
-
-
-
-.roulette-board{
-
-
-margin-top:40px;
-
-
-}
-
-
-
-.zero{
-
-
-width:80px;
-
-height:50px;
-
-background:#008000;
-
-}
-
-
-
-.numbers{
+#numbers{
 
 
 display:grid;
@@ -247,7 +189,7 @@ repeat(12,1fr);
 gap:5px;
 
 
-margin-top:10px;
+margin-top:30px;
 
 
 }
@@ -257,19 +199,21 @@ margin-top:10px;
 button{
 
 
-border-radius:8px;
-
-border:2px solid gold;
-
 padding:10px;
 
+border-radius:8px;
 
-cursor:pointer;
+border:
+
+2px solid gold;
 
 
 background:#222;
 
 color:white;
+
+
+cursor:pointer;
 
 
 }
@@ -278,9 +222,25 @@ color:white;
 
 button:hover{
 
-
 transform:scale(1.1);
 
+}
+
+
+
+.active{
+
+background:gold!important;
+
+color:black;
+
+}
+
+
+
+.zero{
+
+background:green;
 
 }
 
@@ -288,9 +248,7 @@ transform:scale(1.1);
 
 .outside{
 
-
 margin-top:20px;
-
 
 display:flex;
 
@@ -298,22 +256,13 @@ justify-content:center;
 
 flex-wrap:wrap;
 
-
-}
-
-
-
-.outside button{
-
-
-background:#333;
+gap:10px;
 
 }
 
 
 
 .panel{
-
 
 background:#111;
 
@@ -323,23 +272,19 @@ margin-top:30px;
 
 border-radius:20px;
 
-
 }
 
 
 
 .spin{
 
-
-font-size:25px;
-
 background:gold;
 
 color:black;
 
+font-size:22px;
 
 padding:15px 50px;
-
 
 }
 
@@ -347,11 +292,9 @@ padding:15px 50px;
 
 @media(max-width:600px){
 
-
-.numbers{
+#numbers{
 
 grid-template-columns:
-
 repeat(6,1fr);
 
 }
@@ -359,11 +302,10 @@ repeat(6,1fr);
 
 #wheel{
 
-width:240px;
+width:220px;
 
-height:240px;
+height:220px;
 
 }
-
 
 }
