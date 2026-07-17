@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>3D Roulette v2</title>
+<title>European Roulette</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -25,13 +25,18 @@
 <canvas id="wheel" width="500" height="500"></canvas>
 
 
-<div class="controls">
+
+<div class="panel">
 
 
 <h2>
 💰 Egyenleg:
 <span id="money">1000</span> Ft
 </h2>
+
+
+
+<label>Tét:</label>
 
 
 <select id="betAmount">
@@ -53,6 +58,20 @@
 </option>
 
 </select>
+
+
+<p>
+
+Aktuális tét:
+<b>
+<span id="showBet">
+100
+</span>
+Ft
+</b>
+
+</p>
+
 
 
 <h3>
@@ -95,8 +114,7 @@ Páratlan
 
 
 
-<button class="spin"
-onclick="spin()">
+<button class="spin" onclick="spin()">
 
 🎡 PÖRGETÉS
 
@@ -127,7 +145,6 @@ Nyerések:
 Veszteségek:
 <span id="losses">0</span>
 </p>
-
 
 
 </div>
