@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="hu">
-
 <head>
 
 <meta charset="UTF-8">
@@ -12,17 +11,22 @@
 
 </head>
 
-
 <body>
 
 
-<h1>🎰 European Roulette 3D</h1>
+<h1>🎰 European Roulette</h1>
 
 
 <div class="game">
 
 
+<div class="wheel-container">
+
+<div class="pointer"></div>
+
 <canvas id="wheel" width="500" height="500"></canvas>
+
+</div>
 
 
 
@@ -35,42 +39,16 @@
 </h2>
 
 
-
 <label>Tét:</label>
-
 
 <select id="betAmount">
 
-<option value="10">
-10 Ft
-</option>
-
-<option value="50">
-50 Ft
-</option>
-
-<option value="100" selected>
-100 Ft
-</option>
-
-<option value="500">
-500 Ft
-</option>
+<option value="10">10 Ft</option>
+<option value="50">50 Ft</option>
+<option value="100" selected>100 Ft</option>
+<option value="500">500 Ft</option>
 
 </select>
-
-
-<p>
-
-Aktuális tét:
-<b>
-<span id="showBet">
-100
-</span>
-Ft
-</b>
-
-</p>
 
 
 
@@ -83,79 +61,51 @@ nincs
 
 
 
-<div class="buttons">
+<div class="outside">
 
-
-<button onclick="colorBet('red')">
+<button onclick="setBet('red')">
 🔴 Piros
 </button>
 
-
-<button onclick="colorBet('black')">
+<button onclick="setBet('black')">
 ⚫ Fekete
 </button>
 
-
-<button onclick="colorBet('even')">
+<button onclick="setBet('even')">
 Páros
 </button>
 
-
-<button onclick="colorBet('odd')">
+<button onclick="setBet('odd')">
 Páratlan
 </button>
-
 
 </div>
 
 
+
+<h3>Szám:</h3>
 
 <div id="numbers"></div>
 
 
 
 <button class="spin" onclick="spin()">
-
 🎡 PÖRGETÉS
-
 </button>
-
 
 
 <h2 id="message"></h2>
 
 
-
-<hr>
-
-
-<p>
-Játékok:
-<span id="games">0</span>
-</p>
-
-
-<p>
-Nyerések:
-<span id="wins">0</span>
-</p>
-
-
-<p>
-Veszteségek:
-<span id="losses">0</span>
-</p>
-
-
 </div>
 
 
 </div>
+
 
 
 <script src="script.js"></script>
 
 
 </body>
-
 </html>
