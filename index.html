@@ -4,11 +4,272 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Premium European Roulette</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: #051a0e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+
+        .casino-container {
+            background-color: #074824;
+            border: 10px solid #5c3a21;
+            border-radius: 16px;
+            padding: 25px;
+            width: 100%;
+            max-width: 860px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #042613;
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px black;
+        }
+
+        .info-box {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            border: 1px solid #ffd700;
+            letter-spacing: 1px;
+        }
+
+        #balance { color: #4eff82; }
+        #total-bet { color: #ffd84e; }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+        }
+
+        /* Kerék szekció */
+        .wheel-section {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 50%;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+        }
+
+        .pointer {
+            position: absolute;
+            top: 2px;
+            font-size: 28px;
+            color: #ffd700;
+            z-index: 10;
+            text-shadow: 0 2px 5px black;
+        }
+
+        #spin-btn {
+            margin-top: 15px;
+            padding: 12px 50px;
+            font-size: 18px;
+            font-weight: bold;
+            background: linear-gradient(#2ecc71, #27ae60);
+            color: white;
+            border: 2px solid #219653;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            letter-spacing: 1px;
+            transition: transform 0.1s;
+        }
+
+        #spin-btn:active { transform: scale(0.95); }
+
+        #status-message {
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #ffffff;
+            height: 26px;
+            text-shadow: 1px 1px 3px black;
+        }
+
+        /* Asztal elrendezés */
+        .table-scroll-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+
+        .table-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            width: max-content;
+            margin: 0 auto;
+        }
+
+        /* Függőleges zsetonsáv */
+        .chips-side-bar {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-top: 5px;
+        }
+
+        .chip {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            border: 3px dashed rgba(255, 255, 255, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 14px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.6);
+            transition: all 0.2s ease;
+        }
+
+        .chip.active {
+            transform: scale(1.18) translateX(3px);
+            border: 3px solid #ffd700;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.8);
+        }
+
+        /* ATOMBIZTOS RÁCS */
+        .roulette-table-grid {
+            display: grid;
+            grid-template-columns: 45px repeat(12, 44px) 55px;
+            grid-template-rows: repeat(3, 44px) 40px 40px;
+            gap: 2px;
+            background-color: #041c0e;
+            padding: 5px;
+            border: 3px solid rgba(255, 255, 255, 0.25);
+            border-radius: 6px;
+        }
+
+        .cell {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            position: relative;
+            background-color: #074824;
+        }
+
+        .cell:hover { background-color: rgba(255, 255, 255, 0.12) !important; }
+
+        .red { background-color: #a61c1c; }
+        .black { background-color: #1e1e1e; }
+        .green { background-color: #156e36; }
+
+        .zero {
+            grid-column: 1;
+            grid-row: 1 / span 3;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+
+        .columns-bet {
+            background-color: #093a1d;
+            font-size: 12px;
+            color: #bdc3c7;
+        }
+
+        .outside {
+            background-color: #0b4f27;
+            font-size: 13px;
+        }
+
+        /* Romuszok a színekhez */
+        .red-diamond::before {
+            content: "";
+            width: 18px;
+            height: 18px;
+            background-color: #a61c1c;
+            transform: rotate(45deg);
+            border: 1px solid white;
+        }
+        .black-diamond::before {
+            content: "";
+            width: 18px;
+            height: 18px;
+            background-color: #1e1e1e;
+            transform: rotate(45deg);
+            border: 1px solid white;
+        }
+
+        /* Tét zseton grafika a mezőkön */
+        .cell::after {
+            content: attr(data-total-bet);
+            position: absolute;
+            display: none;
+            width: 24px;
+            height: 24px;
+            background-color: #ffd700;
+            color: black;
+            border-radius: 50%;
+            font-size: 10px;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid black;
+            font-weight: bold;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 3px 5px rgba(0,0,0,0.6);
+            z-index: 5;
+        }
+
+        .cell[data-total-bet]::after { display: flex; }
+
+        #clear-btn {
+            margin-top: 5px;
+            padding: 8px 20px;
+            background-color: #501717;
+            color: #ffb3b3;
+            border: 1px solid #732121;
+            border-radius: 4px;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        #clear-btn:hover { background-color: #732121; }
+    </style>
 </head>
 <body>
     <div class="casino-container">
-        <!-- Felső információs sáv -->
         <header>
             <div class="info-box">EGYENLEG: <span id="balance">10000</span> €</div>
             <div class="logo">PREMIUM EUROPEAN ROULETTE</div>
@@ -16,21 +277,16 @@
         </header>
 
         <main>
-            <!-- Rulettkerék szekció -->
             <div class="wheel-section">
                 <div class="pointer">▼</div>
-                <canvas id="wheel" width="320" height="320"></canvas>
+                <canvas id="wheel" width="300" height="300"></canvas>
                 <button id="spin-btn">SPIN</button>
             </div>
 
-            <!-- Státusz üzenetek sávja -->
             <div id="status-message">PLACE YOUR BETS</div>
 
-            <!-- Játékasztal görgethető csomagolásban a szétesés ellen -->
             <div class="table-scroll-wrapper">
                 <div class="table-container">
-                    
-                    <!-- Bal oldali függőleges zsetonsáv -->
                     <div class="chips-side-bar">
                         <div class="chip active" data-value="1" style="background-color: #9c27b0;">1</div>
                         <div class="chip" data-value="5" style="background-color: #e91e63;">5</div>
@@ -39,12 +295,10 @@
                         <div class="chip" data-value="100" style="background-color: #4caf50;">100</div>
                     </div>
 
-                    <!-- Fix koordinátás Rulettasztal -->
                     <div class="roulette-table-grid">
-                        <!-- Nulla mező -->
                         <div class="cell green zero" data-bet="0">0</div>
                         
-                        <!-- 3-as sor (Felső) -->
+                        <!-- 3-as sor -->
                         <div class="cell red" data-bet="3" style="grid-column: 2; grid-row: 1;">3</div>
                         <div class="cell black" data-bet="6" style="grid-column: 3; grid-row: 1;">6</div>
                         <div class="cell red" data-bet="9" style="grid-column: 4; grid-row: 1;">9</div>
@@ -59,7 +313,7 @@
                         <div class="cell red" data-bet="36" style="grid-column: 13; grid-row: 1;">36</div>
                         <div class="cell columns-bet" data-bet="col_3" style="grid-column: 14; grid-row: 1;">2to1</div>
 
-                        <!-- 2-es sor (Középső) -->
+                        <!-- 2-es sor -->
                         <div class="cell black" data-bet="2" style="grid-column: 2; grid-row: 2;">2</div>
                         <div class="cell red" data-bet="5" style="grid-column: 3; grid-row: 2;">5</div>
                         <div class="cell black" data-bet="8" style="grid-column: 4; grid-row: 2;">8</div>
@@ -74,7 +328,7 @@
                         <div class="cell black" data-bet="35" style="grid-column: 13; grid-row: 2;">35</div>
                         <div class="cell columns-bet" data-bet="col_2" style="grid-column: 14; grid-row: 2;">2to1</div>
 
-                        <!-- 1-es sor (Alsó) -->
+                        <!-- 1-es sor -->
                         <div class="cell red" data-bet="1" style="grid-column: 2; grid-row: 3;">1</div>
                         <div class="cell black" data-bet="4" style="grid-column: 3; grid-row: 3;">4</div>
                         <div class="cell red" data-bet="7" style="grid-column: 4; grid-row: 3;">7</div>
@@ -89,12 +343,12 @@
                         <div class="cell red" data-bet="34" style="grid-column: 13; grid-row: 3;">34</div>
                         <div class="cell columns-bet" data-bet="col_1" style="grid-column: 14; grid-row: 3;">2to1</div>
 
-                        <!-- Tucat mezők -->
+                        <!-- Tucatok -->
                         <div class="cell outside" data-bet="doz_1" style="grid-column: 2 / span 4; grid-row: 4;">1st 12</div>
                         <div class="cell outside" data-bet="doz_2" style="grid-column: 6 / span 4; grid-row: 4;">2nd 12</div>
                         <div class="cell outside" data-bet="doz_3" style="grid-column: 10 / span 4; grid-row: 4;">3rd 12</div>
 
-                        <!-- Alsó külső mezők -->
+                        <!-- Külső esélyek -->
                         <div class="cell outside" data-bet="1-18" style="grid-column: 2 / span 2; grid-row: 5;">1 - 18</div>
                         <div class="cell outside" data-bet="even" style="grid-column: 4 / span 2; grid-row: 5;">Even</div>
                         <div class="cell outside red-diamond" data-bet="red" style="grid-column: 6 / span 2; grid-row: 5;"></div>
@@ -105,11 +359,249 @@
                 </div>
             </div>
 
-            <!-- Funkciógombok -->
             <button id="clear-btn">CLEAR BETS</button>
         </main>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        const rouletteNumbers = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
+        const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
+
+        let balance = 10000;
+        let currentChipValue = 1;
+        let currentBets = {}; 
+        let isSpinning = false;
+
+        const canvas = document.getElementById('wheel');
+        const ctx = canvas.getContext('2d');
+        const radius = canvas.width / 2;
+
+        let currentRotation = 0;
+        let currentBallAngle = 1.5 * Math.PI; 
+        let ballRadius = radius * 0.74;
+
+        const balanceDisplay = document.getElementById('balance');
+        const totalBetDisplay = document.getElementById('total-bet');
+        const statusMessage = document.getElementById('status-message');
+        const spinButton = document.getElementById('spin-btn');
+        const clearButton = document.getElementById('clear-btn');
+
+        function normalizeAngle(angle) {
+            return ((angle % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+        }
+
+        function drawWheel() {
+            const numSlices = rouletteNumbers.length;
+            const sliceAngle = (2 * Math.PI) / numSlices;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.save();
+            ctx.translate(radius, radius);
+            ctx.rotate(currentRotation);
+
+            for (let i = 0; i < numSlices; i++) {
+                const angle = i * sliceAngle;
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.arc(0, 0, radius - 5, angle, angle + sliceAngle);
+                ctx.closePath();
+
+                const num = rouletteNumbers[i];
+                if (num === 0) ctx.fillStyle = '#156e36';
+                else if (redNumbers.includes(num)) ctx.fillStyle = '#a61c1c';
+                else ctx.fillStyle = '#1e1e1e';
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                ctx.save();
+                ctx.rotate(angle + sliceAngle / 2);
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 11px Arial';
+                ctx.textAlign = 'right';
+                ctx.fillText(num, radius - 18, 4);
+                ctx.restore();
+            }
+            
+            ctx.beginPath();
+            ctx.arc(0, 0, radius * 0.62, 0, 2 * Math.PI);
+            ctx.fillStyle = '#422817';
+            ctx.fill();
+            ctx.strokeStyle = '#d4af37';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(0, 0, radius * 0.2, 0, 2 * Math.PI);
+            ctx.fillStyle = '#d4af37';
+            ctx.fill();
+
+            ctx.restore();
+
+            ctx.beginPath();
+            const ballX = radius + ballRadius * Math.cos(currentBallAngle);
+            const ballY = radius + ballRadius * Math.sin(currentBallAngle);
+            ctx.arc(ballX, ballY, 6, 0, 2 * Math.PI);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+            ctx.strokeStyle = '#aaaaaa';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        }
+
+        drawWheel();
+
+        document.querySelectorAll('.chip').forEach(chip => {
+            chip.addEventListener('click', (e) => {
+                document.querySelector('.chip.active').classList.remove('active');
+                e.target.classList.add('active');
+                currentChipValue = parseInt(e.target.dataset.value);
+            });
+        });
+
+        document.querySelectorAll('.cell').forEach(cell => {
+            cell.addEventListener('click', () => {
+                if (isSpinning) return;
+                const betType = cell.dataset.bet;
+                
+                if (balance >= currentChipValue) {
+                    balance -= currentChipValue;
+                    currentBets[betType] = (currentBets[betType] || 0) + currentChipValue;
+                    cell.setAttribute('data-total-bet', currentBets[betType]);
+                    updateUI();
+                } else {
+                    statusMessage.textContent = "NOT ENOUGH BALANCE!";
+                }
+            });
+        });
+
+        function updateUI() {
+            balanceDisplay.textContent = balance;
+            const totalBet = Object.values(currentBets).reduce((a, b) => a + b, 0);
+            totalBetDisplay.textContent = totalBet;
+        }
+
+        clearButton.addEventListener('click', () => {
+            if (isSpinning) return;
+            for (let key in currentBets) {
+                balance += currentBets[key];
+            }
+            currentBets = {};
+            document.querySelectorAll('.cell').forEach(cell => cell.removeAttribute('data-total-bet'));
+            updateUI();
+            statusMessage.textContent = "BET CLEARED";
+        });
+
+        spinButton.addEventListener('click', () => {
+            const totalBet = Object.values(currentBets).reduce((a, b) => a + b, 0);
+            if (totalBet === 0) {
+                statusMessage.textContent = "PLEASE PLACE A BET!";
+                return;
+            }
+            if (isSpinning) return;
+
+            isSpinning = true;
+            statusMessage.textContent = "BALL IS SPINNING...";
+            
+            const winningIndex = Math.floor(Math.random() * rouletteNumbers.length);
+            const winningNumber = rouletteNumbers[winningIndex];
+            const sliceAngle = (2 * Math.PI) / rouletteNumbers.length;
+            
+            const currentRotationNormalized = normalizeAngle(currentRotation);
+            const targetRotationNormalized = normalizeAngle((1.5 * Math.PI) - (winningIndex * sliceAngle) - (sliceAngle / 2));
+            let wheelDelta = targetRotationNormalized - currentRotationNormalized;
+            if (wheelDelta < 0) wheelDelta += 2 * Math.PI;
+            
+            const startWheelRotation = currentRotation;
+            const finalWheelRotation = currentRotation + (4 * 2 * Math.PI) + wheelDelta;
+
+            const currentBallAngleNormalized = normalizeAngle(currentBallAngle);
+            let ballDelta = currentBallAngleNormalized - (1.5 * Math.PI); 
+            if (ballDelta < 0) ballDelta += 2 * Math.PI;
+            
+            const startBallAngle = currentBallAngle;
+            const finalBallAngle = currentBallAngle - (6 * 2 * Math.PI) - ballDelta; 
+
+            const outerRadius = radius - 15;
+            const innerRadius = radius * 0.74;
+
+            let startTime = null;
+            const duration = 4000; 
+
+            function animate(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const progress = timestamp - startTime;
+                const t = Math.min(progress / duration, 1);
+                
+                const easeOut = 1 - Math.pow(1 - t, 3);
+                
+                currentRotation = startWheelRotation + (finalWheelRotation - startWheelRotation) * easeOut;
+                currentBallAngle = startBallAngle + (finalBallAngle - startBallAngle) * easeOut;
+                
+                if (t < 0.6) {
+                    ballRadius = outerRadius;
+                } else {
+                    const t2 = (t - 0.6) / 0.4;
+                    const easeDrop = 1 - Math.pow(1 - t2, 2);
+                    ballRadius = outerRadius - (outerRadius - innerRadius) * easeDrop;
+                }
+                
+                drawWheel();
+
+                if (progress < duration) {
+                    requestAnimationFrame(animate);
+                } else {
+                    isSpinning = false;
+                    evaluateResults(winningNumber);
+                }
+            }
+
+            requestAnimationFrame(animate);
+        });
+
+        function evaluateResults(winningNumber) {
+            let totalWon = 0;
+            const isRed = redNumbers.includes(winningNumber);
+            const isEven = winningNumber !== 0 && winningNumber % 2 === 0;
+            const isOdd = winningNumber !== 0 && winningNumber % 2 !== 0;
+
+            let colorName = "Green";
+            if (winningNumber !== 0) colorName = isRed ? "Red" : "Black";
+
+            for (let bet in currentBets) {
+                const amount = currentBets[bet];
+                
+                if (!isNaN(bet) && Number(bet) === winningNumber) {
+                    totalWon += amount * 36;
+                }
+                else if (bet === 'red' && isRed && winningNumber !== 0) totalWon += amount * 2;
+                else if (bet === 'black' && !isRed && winningNumber !== 0) totalWon += amount * 2;
+                else if (bet === 'even' && isEven) totalWon += amount * 2;
+                else if (bet === 'odd' && isOdd) totalWon += amount * 2;
+                else if (bet === '1-18' && winningNumber >= 1 && winningNumber <= 18) totalWon += amount * 2;
+                else if (bet === '19-36' && winningNumber >= 19 && winningNumber <= 36) totalWon += amount * 2;
+                else if (bet === 'doz_1' && winningNumber >= 1 && winningNumber <= 12) totalWon += amount * 3;
+                else if (bet === 'doz_2' && winningNumber >= 13 && winningNumber <= 24) totalWon += amount * 3;
+                else if (bet === 'doz_3' && winningNumber >= 25 && winningNumber <= 36) totalWon += amount * 3;
+                else if (bet === 'col_3' && winningNumber % 3 === 0 && winningNumber !== 0) totalWon += amount * 3;
+                else if (bet === 'col_2' && winningNumber % 3 === 2) totalWon += amount * 3;
+                else if (bet === 'col_1' && winningNumber % 3 === 1) totalWon += amount * 3;
+            }
+
+            balance += totalWon;
+            
+            if (totalWon > 0) {
+                statusMessage.innerHTML = `WINNING NUMBER: <strong style="color: #ffd700">${winningNumber} (${colorName})</strong>. YOU WON: <strong style="color: #4eff82">${totalWon} €</strong>!`;
+            } else {
+                statusMessage.innerHTML = `WINNING NUMBER: <strong>${winningNumber} (${colorName})</strong>. YOU LOST.`;
+            }
+
+            currentBets = {};
+            document.querySelectorAll('.cell').forEach(cell => cell.removeAttribute('data-total-bet'));
+            updateUI();
+        }
+    </script>
 </body>
 </html>
