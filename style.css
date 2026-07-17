@@ -2,65 +2,67 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Arial', sans-serif;
     user-select: none;
 }
 
 body {
-    background-color: #1a1a1a;
+    background-color: #0b140e;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     color: white;
+    padding: 20px;
 }
 
 .casino-container {
-    background-color: #0c4122;
-    border: 8px solid #5c3a21;
-    border-radius: 15px;
+    background-color: #062b16;
+    border: 6px solid #422817;
+    border-radius: 12px;
     padding: 20px;
-    width: 95%;
-    max-width: 900px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+    width: 100%;
+    max-width: 820px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.8);
 }
 
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 25px;
-    border-bottom: 2px solid #072b16;
+    margin-bottom: 20px;
     padding-bottom: 10px;
+    border-bottom: 2px solid #041d0f;
 }
 
 .logo {
-    font-size: 24px;
+    font-size: 16px;
     font-weight: bold;
-    letter-spacing: 3px;
-    color: #e5c158;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+    letter-spacing: 2px;
+    color: #d4af37;
+    text-shadow: 1px 1px 3px black;
 }
 
 .info-box {
-    background: rgba(0, 0, 0, 0.5);
-    padding: 8px 15px;
-    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 8px 16px;
+    border-radius: 4px;
     font-weight: bold;
-    border: 1px solid #e5c158;
+    font-size: 14px;
+    border: 1px solid #d4af37;
 }
 
-#balance { color: #58e57c; }
-#total-bet { color: #e5cd58; }
+#balance { color: #4eff82; }
+#total-bet { color: #ffd84e; }
 
 main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
 }
 
-/* Kerék dizájn */
+/* Kerék elrendezése */
 .wheel-section {
     position: relative;
     display: flex;
@@ -70,138 +72,157 @@ main {
 
 .pointer {
     position: absolute;
-    top: -10px;
-    font-size: 24px;
-    color: #ffcc00;
+    top: -8px;
+    font-size: 26px;
+    color: #ffd700;
     z-index: 10;
-    text-shadow: 0 2px 5px black;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
 }
 
 #spin-btn {
-    margin-top: 15px;
-    padding: 10px 30px;
-    font-size: 18px;
+    margin-top: 10px;
+    padding: 10px 40px;
+    font-size: 16px;
     font-weight: bold;
-    background: linear-gradient(#f3d060, #d4af37);
-    border: none;
-    border-radius: 20px;
+    background: linear-gradient(#2ecc71, #27ae60);
+    color: white;
+    border: 2px solid #27ae60;
+    border-radius: 30px;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-    transition: transform 0.1s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
 }
 
-#spin-btn:active { transform: scale(0.95); }
+#spin-btn:active { transform: scale(0.96); }
 
 #status-message {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
-    color: #fff;
-    min-height: 27px;
+    letter-spacing: 1px;
+    color: #ffffff;
+    height: 24px;
+    text-shadow: 1px 1px 2px black;
 }
 
-/* Zsetonok */
-.chips-container {
+/* Asztal elrendezés: Zsetonok + Rács egymás mellett */
+.table-container {
     display: flex;
-    gap: 15px;
+    align-items: flex-start;
+    gap: 20px;
+    width: 100%;
+    justify-content: center;
+}
+
+/* Függőleges zsetonsáv */
+.chips-side-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 5px;
 }
 
 .chip {
-    width: 45px;
-    height: 45px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    border: 3px dashed white;
+    border: 3px dashed rgba(255, 255, 255, 0.85);
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: bold;
+    font-size: 14px;
+    color: white;
     cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.4);
-    transition: transform 0.2s;
-    background-color: #0055ff;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+    transition: all 0.2s ease;
 }
-
-.chip[data-value="1"] { background-color: #9c27b0; }
-.chip[data-value="5"] { background-color: #e91e63; }
-.chip[data-value="10"] { background-color: #00bcd4; }
-.chip[data-value="50"] { background-color: #ff9800; }
-.chip[data-value="100"] { background-color: #4caf50; }
 
 .chip.active {
-    transform: translateY(-8px);
-    border: 3px solid #ffeb3b;
-    box-shadow: 0 8px 12px rgba(0,0,0,0.6);
+    transform: scale(1.15) translateX(4px);
+    border: 3px solid #ffd700;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.6);
 }
 
-/* Tábla dizájn */
-.betting-board {
-    display: flex;
-    background-color: #07381c;
-    padding: 10px;
-    border: 3px solid #145c32;
-    border-radius: 8px;
-}
-
-.numbers-grid {
+/* ATOMBIZTOS FIX RÁCS */
+.roulette-table-grid {
     display: grid;
-    grid-template-columns: repeat(12, 50px);
-    grid-template-rows: repeat(3, 45px);
+    grid-template-columns: 45px repeat(12, 42px) 50px;
+    grid-template-rows: repeat(3, 42px) 38px 38px;
     gap: 2px;
+    background-color: #041c0e;
+    padding: 4px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
 }
 
+/* Alap cella stílusok */
 .cell {
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: bold;
+    font-size: 14px;
     cursor: pointer;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     position: relative;
     transition: background 0.1s;
 }
 
-.cell:hover { background-color: rgba(255,255,255,0.15) !important; }
+.cell:hover { background-color: rgba(255, 255, 255, 0.1) !important; }
 
-.red { background-color: #b31212; }
-.black { background-color: #1c1c1c; }
-.green { background-color: #0e7a32; }
+/* Színkódok */
+.red { background-color: #9e1c1c; }
+.black { background-color: #1a1a1a; }
+.green { background-color: #136330; }
 
+/* Speciális mezők helyzetei */
 .zero {
-    width: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-right: 2px solid rgba(255,255,255,0.4);
+    grid-column: 1;
+    grid-row: 1 / span 3;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
 }
 
-.outside-bets {
-    grid-column: span 12;
-    display: flex;
-    height: 45px;
-    margin-top: 4px;
-    gap: 2px;
-    width: 100%;
+.columns-bet {
+    background-color: #0a4222;
+    font-size: 12px;
+    color: #ccc;
 }
-
-.numbers-grid { margin-bottom: 2px; }
-.betting-board { flex-direction: column; }
 
 .outside {
-    flex: 1;
-    background-color: #094724;
-    font-size: 13px;
+    background-color: #0c4d28;
+    font-size: 12px;
+    letter-spacing: 0.5px;
 }
 
-/* Ráhelyezett tét jelző (zseton a mezőn) */
+/* Piros és Fekete rombusz a szöveg helyett (mint a képen) */
+.red-diamond::before {
+    content: "";
+    width: 20px;
+    height: 20px;
+    background-color: #9e1c1c;
+    transform: rotate(45deg);
+    border: 1px solid white;
+}
+.black-diamond::before {
+    content: "";
+    width: 20px;
+    height: 20px;
+    background-color: #1a1a1a;
+    transform: rotate(45deg);
+    border: 1px solid white;
+}
+
+/* Tétjelző zseton felugró grafika a mezőkön */
 .cell::after {
     content: attr(data-total-bet);
     position: absolute;
     display: none;
-    width: 24px;
-    height: 24px;
-    background-color: #ffcc00;
+    width: 22px;
+    height: 22px;
+    background-color: #ffd700;
     color: black;
     border-radius: 50%;
-    font-size: 11px;
+    font-size: 10px;
     justify-content: center;
     align-items: center;
     border: 1px solid black;
@@ -209,17 +230,23 @@ main {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    box-shadow: 0 2px 4px black;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    z-index: 5;
 }
 
-.cell[data-total-bet]::after { display: flex; }
+.cell[data-total-bet]::after {
+    display: flex;
+}
 
 #clear-btn {
-    padding: 6px 15px;
-    background: #5c1d1d;
-    color: white;
-    border: 1px solid #7a2626;
+    margin-top: 5px;
+    padding: 6px 16px;
+    background-color: #4a1515;
+    color: #ff9999;
+    border: 1px solid #631c1c;
     border-radius: 4px;
+    font-size: 12px;
     cursor: pointer;
+    font-weight: bold;
 }
-#clear-btn:hover { background: #7a2626; }
+#clear-btn:hover { background-color: #631c1c; }
