@@ -3,9 +3,9 @@ body{
 margin:0;
 
 background:
-radial-gradient(circle,#147a38,#001b08);
+radial-gradient(circle,#126b35,#001a09);
 
-font-family:Arial;
+font-family:Arial,sans-serif;
 
 color:white;
 
@@ -14,44 +14,21 @@ text-align:center;
 }
 
 
+h1{
 
-.game{
-
-max-width:900px;
-
-margin:auto;
-
-padding:20px;
+margin-top:25px;
 
 }
 
 
 
-.casino-table{
+.game{
 
-background:
-linear-gradient(
-145deg,
-#075522,
-#002b10
-);
+display:flex;
 
+flex-direction:column;
 
-padding:40px;
-
-border-radius:40px;
-
-
-box-shadow:
-
-0 50px 100px black,
-inset 0 0 50px black;
-
-
-transform:
-perspective(900px)
-rotateX(10deg);
-
+align-items:center;
 
 }
 
@@ -59,153 +36,68 @@ rotateX(10deg);
 
 #wheel{
 
+margin-top:20px;
 
-width:300px;
-
-height:300px;
-
-
-margin:auto;
-
+background:#064d20;
 
 border-radius:50%;
 
-
-background:
-
-conic-gradient(
-
-green 0deg 10deg,
-
-red 10deg 30deg,
-
-black 30deg 50deg,
-
-red 50deg 70deg,
-
-black 70deg 90deg,
-
-red 90deg 110deg,
-
-black 110deg 130deg,
-
-red 130deg 150deg,
-
-black 150deg 170deg,
-
-red 170deg 190deg,
-
-black 190deg 210deg,
-
-red 210deg 230deg,
-
-black 230deg 250deg,
-
-red 250deg 270deg,
-
-black 270deg 290deg,
-
-red 290deg 310deg,
-
-black 310deg 330deg,
-
-red 330deg 360deg
-
-);
-
-
-border:
-
-12px solid gold;
-
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-
 box-shadow:
 
-0 30px 60px black;
+0 40px 80px black,
+
+inset 0 0 40px black;
 
 
-transition:
+transform:
 
-transform 5s cubic-bezier(.15,.8,.2,1);
-
+perspective(800px)
+rotateX(15deg);
 
 }
 
 
 
-#resultNumber{
-
-
-width:90px;
-
-height:90px;
-
-
-border-radius:50%;
-
-
-background:white;
-
-color:black;
-
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-
-font-size:40px;
-
-
-box-shadow:
-
-0 5px 20px black;
-
-
-}
-
-
-
-
-#numbers{
-
-
-display:grid;
-
-grid-template-columns:
-
-repeat(12,1fr);
-
-
-gap:5px;
-
+.controls{
 
 margin-top:30px;
 
+background:
+
+linear-gradient(
+145deg,
+#075522,
+#002b12
+);
+
+
+padding:25px;
+
+border-radius:25px;
+
+
+box-shadow:
+
+0 20px 50px black;
+
+max-width:600px;
 
 }
 
 
 
-button{
+button,
+select{
 
 
-padding:10px;
+padding:12px 18px;
 
-border-radius:8px;
+margin:5px;
 
-border:
 
-2px solid gold;
+border-radius:10px;
+
+border:2px solid gold;
 
 
 background:#222;
@@ -216,61 +108,16 @@ color:white;
 cursor:pointer;
 
 
+font-size:16px;
+
+
 }
 
 
 
 button:hover{
 
-transform:scale(1.1);
-
-}
-
-
-
-.active{
-
-background:gold!important;
-
-color:black;
-
-}
-
-
-
-.zero{
-
-background:green;
-
-}
-
-
-
-.outside{
-
-margin-top:20px;
-
-display:flex;
-
-justify-content:center;
-
-flex-wrap:wrap;
-
-gap:10px;
-
-}
-
-
-
-.panel{
-
-background:#111;
-
-padding:20px;
-
-margin-top:30px;
-
-border-radius:20px;
+transform:scale(1.05);
 
 }
 
@@ -278,13 +125,74 @@ border-radius:20px;
 
 .spin{
 
+
 background:gold;
 
 color:black;
 
+
 font-size:22px;
 
+
 padding:15px 50px;
+
+
+margin-top:20px;
+
+}
+
+
+
+#numbers{
+
+
+display:grid;
+
+
+grid-template-columns:
+repeat(12,1fr);
+
+
+gap:5px;
+
+
+margin-top:20px;
+
+
+}
+
+
+
+#numbers button{
+
+
+width:35px;
+
+height:35px;
+
+padding:0;
+
+
+}
+
+
+
+.active{
+
+
+background:gold!important;
+
+color:black;
+
+
+}
+
+
+
+#message{
+
+
+min-height:30px;
 
 }
 
@@ -292,19 +200,20 @@ padding:15px 50px;
 
 @media(max-width:600px){
 
-#numbers{
 
-grid-template-columns:
-repeat(6,1fr);
+#wheel{
+
+width:90vw;
+
+height:90vw;
 
 }
 
 
-#wheel{
+#numbers{
 
-width:220px;
-
-height:220px;
+grid-template-columns:
+repeat(6,1fr);
 
 }
 
