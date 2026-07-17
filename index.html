@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -10,9 +11,12 @@
 
 </head>
 
+
 <body>
 
+
 <div class="game">
+
 
 <h1>🎰 3D Roulette Simulator</h1>
 
@@ -21,8 +25,6 @@
 
 
 <div id="wheel">
-
-<div id="ball"></div>
 
 <div id="resultNumber">
 0
@@ -34,57 +36,48 @@
 
 <div class="roulette-board">
 
-<button class="zero" onclick="chooseNumber(0)">
+
+<button class="zero number"
+onclick="chooseNumber(0)">
 0
 </button>
 
 
-<div class="numbers">
+<div id="numbers"></div>
 
-<script>
-
-for(let i=1;i<=36;i++){
-
-document.write(
-`
-<button onclick="chooseNumber(${i})">
-${i}
-</button>
-`
-)
-
-}
-
-</script>
-
-</div>
 
 
 <div class="outside">
 
-<button onclick="setBet('red')">
+
+<button onclick="setBet('red',this)">
 🔴 Piros
 </button>
 
-<button onclick="setBet('black')">
+
+<button onclick="setBet('black',this)">
 ⚫ Fekete
 </button>
 
-<button onclick="setBet('even')">
+
+<button onclick="setBet('even',this)">
 Páros
 </button>
 
-<button onclick="setBet('odd')">
+
+<button onclick="setBet('odd',this)">
 Páratlan
 </button>
 
-</div>
-
 
 </div>
 
 
 </div>
+
+
+</div>
+
 
 
 
@@ -100,7 +93,13 @@ Ft
 </h2>
 
 
-<select id="amount">
+
+<label>
+Tét:
+</label>
+
+
+<select id="amount" onchange="changeAmount()">
 
 <option value="10">
 10 Ft
@@ -121,15 +120,26 @@ Ft
 </select>
 
 
-<br>
+<p>
+Aktuális tét:
+<span id="currentAmount">
+100
+</span>
+Ft
+</p>
 
 
-<button class="spin" onclick="spin()">
+
+<button class="spin"
+onclick="spin()">
 🎡 PÖRGETÉS
 </button>
 
 
-<h2 id="message"></h2>
+
+<h2 id="message">
+Válassz fogadást!
+</h2>
 
 
 
@@ -140,7 +150,7 @@ Ft
 
 
 <p>
-Játék:
+Játékok:
 <span id="games">
 0
 </span>
@@ -148,7 +158,7 @@ Játék:
 
 
 <p>
-Nyert:
+Nyerések:
 <span id="wins">
 0
 </span>
@@ -156,7 +166,7 @@ Nyert:
 
 
 <p>
-Vesztett:
+Veszteségek:
 <span id="losses">
 0
 </span>
@@ -171,6 +181,7 @@ RTP:
 </p>
 
 
+
 </div>
 
 
@@ -178,6 +189,7 @@ RTP:
 
 
 <script src="script.js"></script>
+
 
 </body>
 </html>
