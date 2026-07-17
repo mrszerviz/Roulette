@@ -1,20 +1,28 @@
 let money = 1000;
 
+
+let currentAmount = 100;
+
+
 let bet = null;
 
 let selectedNumber = null;
 
 
-let games=0;
-let wins=0;
-let losses=0;
+let games = 0;
 
-let totalBet=0;
-let totalReturn=0;
+let wins = 0;
 
+let losses = 0;
 
 
-const redNumbers=[
+let totalBet = 0;
+
+let totalReturn = 0;
+
+
+
+const redNumbers = [
 
 1,3,5,7,9,
 12,14,16,18,
@@ -25,61 +33,156 @@ const redNumbers=[
 
 
 
+
+// számgombok létrehozása
+
+const numbers =
+document.getElementById("numbers");
+
+
+for(let i=1;i<=36;i++){
+
+
+let button =
+document.createElement("button");
+
+
+button.innerHTML=i;
+
+
+button.onclick=function(){
+
+chooseNumber(i);
+
+};
+
+
+numbers.appendChild(button);
+
+
+}
+
+
+
+
+function changeAmount(){
+
+
+currentAmount =
+Number(
+document.getElementById("amount").value
+);
+
+
+document.getElementById("currentAmount")
+.innerHTML=currentAmount;
+
+
+}
+
+
+
+
+
 function chooseNumber(number){
+
 
 selectedNumber=number;
 
 bet=null;
 
 
+clearButtons();
+
+
+event.target.classList.add("active");
+
+
+
 document.getElementById("message")
 .innerHTML=
-"Szám: "+number;
+"Szám fogadás: "
++number+
+" | Tét: "
++currentAmount+
+" Ft";
+
 
 }
 
 
 
-function setBet(type){
+
+function setBet(type,button){
+
 
 bet=type;
 
 selectedNumber=null;
 
 
+clearButtons();
+
+
+button.classList.add("active");
+
+
+
 document.getElementById("message")
 .innerHTML=
-"Fogadás: "+type;
+"Fogadás: "
++type+
+" | Tét: "
++currentAmount+
+" Ft";
+
 
 }
 
 
 
-function color(number){
+
+
+function clearButtons(){
+
+
+document.querySelectorAll("button")
+.forEach(btn=>{
+
+btn.classList.remove("active");
+
+});
+
+
+}
+
+
+
+
+
+function getColor(number){
+
 
 if(number===0)
+
 return "green";
 
 
 if(redNumbers.includes(number))
+
 return "red";
 
 
 return "black";
 
+
 }
 
 
 
 
+
 function spin(){
-
-
-let amount=
-
-Number(
-document.getElementById("amount").value
-);
 
 
 
@@ -93,7 +196,7 @@ return;
 
 
 
-if(money<amount){
+if(money<currentAmount){
 
 alert("Nincs elég pénz!");
 
@@ -103,44 +206,40 @@ return;
 
 
 
-money-=amount;
 
-totalBet+=amount;
+money-=currentAmount;
+
+totalBet+=currentAmount;
 
 games++;
 
 
 
-let wheel=
-
+let wheel =
 document.getElementById("wheel");
 
 
 
-let rotate=
-
+let rotation =
 Math.floor(Math.random()*7200)+1440;
 
 
-
-wheel.style.transform=
-
-`rotate(${rotate}deg)`;
+wheel.style.transform =
+`rotate(${rotation}deg)`;
 
 
 
-
-let number=
-
+let result =
 Math.floor(Math.random()*37);
 
 
 
-setTimeout(()=>{
+setTimeout(function(){
+
 
 
 document.getElementById("resultNumber")
-.innerHTML=number;
+.innerHTML=result;
 
 
 
@@ -150,13 +249,16 @@ let multiplier=0;
 
 
 
-let c=color(number);
+let color =
+getColor(result);
+
+
 
 
 
 if(selectedNumber!==null){
 
-if(number===selectedNumber){
+if(result===selectedNumber){
 
 win=true;
 
@@ -168,7 +270,9 @@ multiplier=35;
 
 
 
-if(bet==="red" && c==="red"){
+
+
+if(bet==="red" && color==="red"){
 
 win=true;
 
@@ -178,7 +282,7 @@ multiplier=1;
 
 
 
-if(bet==="black" && c==="black"){
+if(bet==="black" && color==="black"){
 
 win=true;
 
@@ -188,7 +292,7 @@ multiplier=1;
 
 
 
-if(bet==="even" && number!==0 && number%2===0){
+if(bet==="even" && result!==0 && result%2===0){
 
 win=true;
 
@@ -198,38 +302,38 @@ multiplier=1;
 
 
 
-if(bet==="odd" && number!==0 && number%2!==0){
+if(bet==="odd" && result!==0 && result%2!==0){
 
 win=true;
 
 multiplier=1;
 
 }
+
+
 
 
 
 if(win){
 
 
-let prize=
-
-amount*(multiplier+1);
+let prize =
+currentAmount*(multiplier+1);
 
 
 money+=prize;
 
+
 totalReturn+=prize;
+
 
 wins++;
 
 
 document.getElementById("message")
 .innerHTML=
-
-"🎉 NYERTÉL! "+
-number+
-" +"+
-prize+
+"🎉 NYERTÉL! +"
++prize+
 " Ft";
 
 
@@ -243,12 +347,9 @@ losses++;
 
 document.getElementById("message")
 .innerHTML=
-
-"❌ Vesztettél! "+
-number+
-" ("+
-c+
-")";
+"❌ Vesztettél! "
++result+
+" ("+color+")";
 
 
 }
@@ -258,10 +359,15 @@ c+
 update();
 
 
+
 },5000);
 
 
+
 }
+
+
+
 
 
 
@@ -291,8 +397,7 @@ let rtp=0;
 
 if(totalBet>0){
 
-rtp=
-
+rtp =
 (totalReturn/totalBet)*100;
 
 }
@@ -300,7 +405,6 @@ rtp=
 
 document.getElementById("rtp")
 .innerHTML=
-
 rtp.toFixed(2);
 
 
