@@ -1,9 +1,7 @@
 const canvas = document.getElementById("wheel");
 const ctx = canvas.getContext("2d");
 
-const SIZE = 500;
-const center = SIZE / 2;
-
+const center = 250;
 const wheelRadius = 220;
 const ballRadius = 185;
 
@@ -37,31 +35,34 @@ let selectedNumber = null;
 
 
 
-// -------------------------
-// Kerék rajzolás
-// -------------------------
+// =========================
+// KERÉK RAJZOLÁS
+// =========================
 
-function draw(){
+function drawWheel(){
 
-    ctx.clearRect(0,0,SIZE,SIZE);
+    ctx.clearRect(0,0,500,500);
 
 
-    const slice = 
-        (Math.PI*2) / wheelNumbers.length;
+    const slice =
+    (Math.PI * 2) / wheelNumbers.length;
 
 
 
     for(let i=0;i<wheelNumbers.length;i++){
 
-        const start =
-            wheelAngle + i*slice;
 
-        const end =
-            start + slice;
+        let start =
+        wheelAngle + i * slice;
 
 
-        const number =
-            wheelNumbers[i];
+        let end =
+        start + slice;
+
+
+        let number =
+        wheelNumbers[i];
+
 
 
         ctx.beginPath();
@@ -77,7 +78,8 @@ function draw(){
         );
 
 
-        if(number===0){
+
+        if(number === 0){
 
             ctx.fillStyle="#008000";
 
@@ -96,13 +98,14 @@ function draw(){
 
         ctx.fill();
 
+
         ctx.strokeStyle="gold";
 
         ctx.stroke();
 
 
 
-        // számok
+        // szám felirat
 
         ctx.save();
 
@@ -122,6 +125,7 @@ function draw(){
 
         ctx.restore();
 
+
     }
 
 
@@ -138,6 +142,7 @@ function draw(){
         Math.PI*2
     );
 
+
     ctx.fillStyle="#ddd";
 
     ctx.fill();
@@ -146,30 +151,31 @@ function draw(){
 
     ctx.fillStyle="black";
 
-    ctx.font="40px Arial";
+    ctx.font="35px Arial";
 
     ctx.textAlign="center";
+
 
     ctx.fillText(
         "🎰",
         center,
-        center+15
+        center+12
     );
 
 
 
     // GOLYÓ
 
-    const bx =
-        center +
-        Math.cos(ballAngle) *
-        ballRadius;
+    let bx =
+    center +
+    Math.cos(ballAngle) *
+    ballRadius;
 
 
-    const by =
-        center +
-        Math.sin(ballAngle) *
-        ballRadius;
+    let by =
+    center +
+    Math.sin(ballAngle) *
+    ballRadius;
 
 
 
@@ -188,7 +194,7 @@ function draw(){
 
     ctx.shadowColor="black";
 
-    ctx.shadowBlur=15;
+    ctx.shadowBlur=12;
 
     ctx.fill();
 
@@ -197,21 +203,21 @@ function draw(){
 }
 
 
-draw();
+drawWheel();
 
 
 
 
-
-// -------------------------
-// Szám gombok
-// -------------------------
+// =========================
+// SZÁMGOMBOK
+// =========================
 
 const numbersBox =
 document.getElementById("numbers");
 
 
 for(let i=0;i<=36;i++){
+
 
     let button =
     document.createElement("button");
@@ -220,18 +226,24 @@ for(let i=0;i<=36;i++){
     button.innerHTML=i;
 
 
+
     button.onclick=function(){
 
+
         selectedNumber=i;
+
         selectedBet=null;
+
 
         clearActive();
 
+
         button.classList.add("active");
+
 
         document.getElementById("selectedBet")
         .innerHTML =
-        "Szám: "+i;
+        "Szám: " + i;
 
     };
 
@@ -244,25 +256,30 @@ for(let i=0;i<=36;i++){
 
 
 
-// -------------------------
-// Külső fogadás
-// -------------------------
+// =========================
+// KÜLSŐ FOGADÁS
+// =========================
 
-function setBet(type){
 
-    selectedBet=type;
-    selectedNumber=null;
+function setBet(type, button){
+
+
+    selectedBet = type;
+
+    selectedNumber = null;
 
 
     clearActive();
 
 
-    event.target.classList.add("active");
+    button.classList.add("active");
+
 
 
     document.getElementById("selectedBet")
     .innerHTML =
     type;
+
 
 }
 
@@ -270,11 +287,10 @@ function setBet(type){
 
 function clearActive(){
 
-    document
-    .querySelectorAll("button")
-    .forEach(b=>{
+    document.querySelectorAll("button")
+    .forEach(btn=>{
 
-        b.classList.remove("active");
+        btn.classList.remove("active");
 
     });
 
@@ -284,9 +300,9 @@ function clearActive(){
 
 
 
-// -------------------------
-// Tét
-// -------------------------
+// =========================
+// TÉT
+// =========================
 
 function getBetAmount(){
 
@@ -300,18 +316,22 @@ function getBetAmount(){
 
 
 
-// -------------------------
-// Pörgetés
-// -------------------------
+// =========================
+// PÖRGETÉS
+// =========================
 
 function spin(){
 
 
     if(spinning)
-        return;
+    return;
 
 
-    if(!selectedBet && selectedNumber===null){
+
+    if(
+        selectedBet===null &&
+        selectedNumber===null
+    ){
 
         alert("Válassz fogadást!");
 
@@ -322,7 +342,7 @@ function spin(){
 
 
     let amount =
-        getBetAmount();
+    getBetAmount();
 
 
 
@@ -339,16 +359,14 @@ function spin(){
     money -= amount;
 
 
+
     spinning=true;
 
 
 
-    // nyertes mező
-
     const winnerIndex =
     Math.floor(
-        Math.random() *
-        wheelNumbers.length
+        Math.random()*wheelNumbers.length
     );
 
 
@@ -359,54 +377,49 @@ function spin(){
 
 
 
-    // kerék cél
+    // A nyertes mező a mutatóhoz kerül
 
-    const wheelTarget =
-        -(winnerIndex * slice)
-        -
-        slice/2
-        +
-        Math.PI*1.5;
+    let wheelTarget =
+    Math.PI*1.5
+    -
+    (winnerIndex * slice)
+    -
+    (slice/2);
 
 
 
-    // golyó cél
-
-    const ballTarget =
-        wheelTarget
-        -
-        Math.PI/2;
+    let ballTarget =
+    wheelTarget;
 
 
 
     let startWheel =
-        wheelAngle;
+    wheelAngle;
 
 
     let startBall =
-        ballAngle;
+    ballAngle;
 
 
 
-    let time = 0;
+    let progress=0;
 
 
 
     function animate(){
 
 
-        time += 0.015;
-
-
-        if(time>1)
-            time=1;
+        progress +=0.012;
 
 
 
-        // lassítás
+        if(progress>1)
+        progress=1;
+
+
 
         let ease =
-        1 - Math.pow(1-time,4);
+        1-Math.pow(1-progress,4);
 
 
 
@@ -422,25 +435,23 @@ function spin(){
 
 
 
-        // golyó sokat fut körbe
-
         ballAngle =
         startBall +
         (
             ballTarget -
-            startBall +
-            Math.PI*14
+            startBall -
+            Math.PI*12
         )
         *
         ease;
 
 
 
-        draw();
+        drawWheel();
 
 
 
-        if(time<1){
+        if(progress<1){
 
             requestAnimationFrame(
                 animate
@@ -448,6 +459,7 @@ function spin(){
 
         }
         else{
+
 
             wheelAngle =
             wheelTarget;
@@ -457,7 +469,8 @@ function spin(){
             ballTarget;
 
 
-            draw();
+            drawWheel();
+
 
 
             finish(
@@ -465,8 +478,8 @@ function spin(){
                 amount
             );
 
-        }
 
+        }
 
     }
 
@@ -475,17 +488,19 @@ function spin(){
         animate
     );
 
+
 }
 
 
 
 
 
-// -------------------------
-// Eredmény
-// -------------------------
+// =========================
+// EREDMÉNY
+// =========================
 
-function finish(number,amount){
+
+function finish(number, amount){
 
 
     spinning=false;
@@ -540,9 +555,11 @@ function finish(number,amount){
 
 
 
-    if(selectedBet==="even" &&
-       number!==0 &&
-       number%2===0){
+    if(
+        selectedBet==="even" &&
+        number!==0 &&
+        number%2===0
+    ){
 
         win=true;
 
@@ -552,22 +569,27 @@ function finish(number,amount){
 
 
 
-    if(selectedBet==="odd" &&
-       number!==0 &&
-       number%2!==0){
+    if(
+        selectedBet==="odd" &&
+        number!==0 &&
+        number%2!==0
+    ){
 
         win=true;
 
         multiplier=1;
 
     }
+
+
 
 
 
     if(win){
 
+
         let prize =
-        amount*(multiplier+1);
+        amount * (multiplier+1);
 
 
         money += prize;
@@ -576,9 +598,9 @@ function finish(number,amount){
         document.getElementById("message")
         .innerHTML =
         "🎉 Nyertél! "
-        +number+
-        " +"+
-        prize+
+        + number +
+        " +" +
+        prize +
         " Ft";
 
 
@@ -589,10 +611,11 @@ function finish(number,amount){
         document.getElementById("message")
         .innerHTML =
         "❌ Vesztettél! "
-        +number+
+        + number +
         " ("+
         color+
         ")";
+
 
     }
 
@@ -601,5 +624,6 @@ function finish(number,amount){
     document.getElementById("money")
     .innerHTML =
     money;
+
 
 }
