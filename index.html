@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="hu">
+
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>European Roulette</title>
+<title>European Roulette 3D</title>
 
 <link rel="stylesheet" href="style.css">
 
 </head>
 
+
 <body>
 
 
-<h1>🎰 European Roulette</h1>
+<h1>🎰 European Roulette 3D</h1>
 
 
 <div class="game">
@@ -22,11 +24,16 @@
 
 <div class="wheel-container">
 
-<div class="pointer"></div>
+    <div class="pointer"></div>
 
-<canvas id="wheel" width="500" height="500"></canvas>
+    <canvas 
+        id="wheel" 
+        width="500" 
+        height="500">
+    </canvas>
 
 </div>
+
 
 
 
@@ -35,20 +42,39 @@
 
 <h2>
 💰 Egyenleg:
-<span id="money">1000</span> Ft
+<span id="money">
+1000
+</span>
+Ft
 </h2>
 
 
-<label>Tét:</label>
+
+<label>
+Tét:
+</label>
+
 
 <select id="betAmount">
 
-<option value="10">10 Ft</option>
-<option value="50">50 Ft</option>
-<option value="100" selected>100 Ft</option>
-<option value="500">500 Ft</option>
+<option value="10">
+10 Ft
+</option>
+
+<option value="50">
+50 Ft
+</option>
+
+<option value="100" selected>
+100 Ft
+</option>
+
+<option value="500">
+500 Ft
+</option>
 
 </select>
+
 
 
 
@@ -61,40 +87,59 @@ nincs
 
 
 
+
 <div class="outside">
 
-<button onclick="setBet('red')">
+
+<button onclick="setBet('red', this)">
 🔴 Piros
 </button>
 
-<button onclick="setBet('black')">
+
+<button onclick="setBet('black', this)">
 ⚫ Fekete
 </button>
 
-<button onclick="setBet('even')">
+
+<button onclick="setBet('even', this)">
 Páros
 </button>
 
-<button onclick="setBet('odd')">
+
+<button onclick="setBet('odd', this)">
 Páratlan
 </button>
+
 
 </div>
 
 
 
-<h3>Szám:</h3>
+
+<h3>
+Szám választás
+</h3>
+
 
 <div id="numbers"></div>
 
 
 
-<button class="spin" onclick="spin()">
+
+<button 
+class="spin"
+onclick="spin()">
+
 🎡 PÖRGETÉS
+
 </button>
 
 
-<h2 id="message"></h2>
+
+<h2 id="message">
+Válassz fogadást!
+</h2>
+
 
 
 </div>
@@ -108,4 +153,5 @@ Páratlan
 
 
 </body>
+
 </html>
