@@ -1,47 +1,153 @@
 body{
 
-background:#080808;
+margin:0;
+
+background:
+radial-gradient(
+circle,
+#19833d,
+#001b09
+);
+
+font-family:
+Arial;
+
 color:white;
-font-family:Arial;
+
 text-align:center;
 
 }
 
 
+
 .game{
 
-max-width:600px;
+max-width:900px;
+
 margin:auto;
+
 padding:20px;
 
 }
 
 
+
+.casino-table{
+
+
+background:
+
+linear-gradient(
+145deg,
+#075522,
+#002b12
+);
+
+
+padding:40px;
+
+border-radius:50px;
+
+
+box-shadow:
+
+0 50px 100px black,
+inset 0 0 50px #000;
+
+
+
+transform:
+
+perspective(1000px)
+rotateX(12deg);
+
+
+}
+
+
+
+
 #wheel{
 
-width:250px;
-height:250px;
 
-margin:30px auto;
+width:320px;
+
+height:320px;
+
+
+margin:auto;
+
 
 border-radius:50%;
 
+
 background:
+
 conic-gradient(
-red,
-black,
-red,
-black,
-green
+
+green 0deg 10deg,
+
+red 10deg 30deg,
+
+black 30deg 50deg,
+
+red 50deg 70deg,
+
+black 70deg 90deg,
+
+red 90deg 110deg,
+
+black 110deg 130deg,
+
+red 130deg 150deg,
+
+black 150deg 170deg,
+
+red 170deg 190deg,
+
+black 190deg 210deg,
+
+red 210deg 230deg,
+
+black 230deg 250deg,
+
+red 250deg 270deg,
+
+black 270deg 290deg,
+
+red 290deg 310deg,
+
+black 310deg 330deg,
+
+red 330deg 360deg
+
 );
 
-border:8px solid gold;
+
+
+border:
+
+15px solid gold;
+
+
+box-shadow:
+
+0 30px 60px black,
+
+inset 0 0 40px white;
+
 
 display:flex;
+
 align-items:center;
+
 justify-content:center;
 
-transition:transform 4s cubic-bezier(.17,.67,.83,.67);
+
+transition:
+
+transform 5s cubic-bezier(.15,.8,.2,1);
+
 
 }
 
@@ -49,87 +155,215 @@ transition:transform 4s cubic-bezier(.17,.67,.83,.67);
 
 #resultNumber{
 
-background:white;
-color:black;
 
 width:100px;
+
 height:100px;
+
 
 border-radius:50%;
 
+
+background:
+
+radial-gradient(
+white,
+gray
+);
+
+
+color:black;
+
+
 display:flex;
+
 align-items:center;
+
 justify-content:center;
+
 
 font-size:45px;
 
+
+box-shadow:
+
+0 5px 20px black;
+
+
 }
 
 
 
-button,select{
+#ball{
 
-padding:12px;
+position:absolute;
 
-margin:5px;
+width:25px;
 
-border-radius:10px;
+height:25px;
 
-border:none;
+background:white;
+
+border-radius:50%;
+
+
+}
+
+
+
+.roulette-board{
+
+
+margin-top:40px;
+
+
+}
+
+
+
+.zero{
+
+
+width:80px;
+
+height:50px;
+
+background:#008000;
+
+}
+
+
+
+.numbers{
+
+
+display:grid;
+
+grid-template-columns:
+
+repeat(12,1fr);
+
+
+gap:5px;
+
+
+margin-top:10px;
+
+
+}
+
+
+
+button{
+
+
+border-radius:8px;
+
+border:2px solid gold;
+
+padding:10px;
+
 
 cursor:pointer;
 
+
+background:#222;
+
+color:white;
+
+
 }
+
 
 
 button:hover{
 
-transform:scale(1.05);
+
+transform:scale(1.1);
+
 
 }
 
 
-.spin{
 
-background:gold;
+.outside{
 
-font-size:22px;
 
-width:200px;
+margin-top:20px;
+
+
+display:flex;
+
+justify-content:center;
+
+flex-wrap:wrap;
+
 
 }
 
 
-#numbers button{
+
+.outside button{
+
 
 background:#333;
-color:white;
-
-width:40px;
 
 }
+
 
 
 .panel{
 
-background:#181818;
+
+background:#111;
 
 padding:20px;
 
+margin-top:30px;
+
 border-radius:20px;
 
-}
-
-
-.win{
-
-color:#00ff66;
 
 }
 
 
-.lose{
 
-color:red;
+.spin{
+
+
+font-size:25px;
+
+background:gold;
+
+color:black;
+
+
+padding:15px 50px;
+
+
+}
+
+
+
+@media(max-width:600px){
+
+
+.numbers{
+
+grid-template-columns:
+
+repeat(6,1fr);
+
+}
+
+
+#wheel{
+
+width:240px;
+
+height:240px;
+
+}
+
 
 }
