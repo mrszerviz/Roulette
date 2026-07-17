@@ -34,7 +34,7 @@ let spinning=false;
 
 
 
-let money=1000;
+let money = 1000;
 
 
 let selectedBet=null;
