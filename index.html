@@ -3,43 +3,72 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Advanced Roulette</title>
+
+<title>3D Roulette Simulator</title>
+
 <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
 <div class="game">
 
-<h1>🎰 Advanced Roulette</h1>
+<h1>🎰 3D Roulette Simulator</h1>
+
+
+<div class="casino-table">
+
 
 <div id="wheel">
-    <div id="resultNumber">0</div>
+
+<div id="ball"></div>
+
+<div id="resultNumber">
+0
+</div>
+
 </div>
 
 
-<div class="panel">
 
-<h3>Egyenleg:
-<span id="money">1000</span> Ft
-</h3>
+<div class="roulette-board">
 
-<h3>Tét</h3>
-
-<select id="betAmount">
-<option value="10">10 Ft</option>
-<option value="50">50 Ft</option>
-<option value="100" selected>100 Ft</option>
-<option value="500">500 Ft</option>
-</select>
+<button class="zero" onclick="chooseNumber(0)">
+0
+</button>
 
 
-<h3>Fogadás</h3>
+<div class="numbers">
 
-<div class="buttons">
+<script>
 
-<button onclick="setBet('red')">🔴 Piros</button>
-<button onclick="setBet('black')">⚫ Fekete</button>
+for(let i=1;i<=36;i++){
+
+document.write(
+`
+<button onclick="chooseNumber(${i})">
+${i}
+</button>
+`
+)
+
+}
+
+</script>
+
+</div>
+
+
+<div class="outside">
+
+<button onclick="setBet('red')">
+🔴 Piros
+</button>
+
+<button onclick="setBet('black')">
+⚫ Fekete
+</button>
 
 <button onclick="setBet('even')">
 Páros
@@ -52,45 +81,98 @@ Páratlan
 </div>
 
 
-<h3>Szám választás</h3>
+</div>
 
-<div id="numbers"></div>
+
+</div>
+
+
+
+<div class="panel">
+
+
+<h2>
+💰 Egyenleg:
+<span id="money">
+1000
+</span>
+Ft
+</h2>
+
+
+<select id="amount">
+
+<option value="10">
+10 Ft
+</option>
+
+<option value="50">
+50 Ft
+</option>
+
+<option value="100" selected>
+100 Ft
+</option>
+
+<option value="500">
+500 Ft
+</option>
+
+</select>
+
+
+<br>
 
 
 <button class="spin" onclick="spin()">
-PÖRGETÉS
+🎡 PÖRGETÉS
 </button>
 
 
 <h2 id="message"></h2>
 
 
+
 <hr>
+
 
 <h3>Statisztika</h3>
 
-<p>
-Játékok:
-<span id="games">0</span>
-</p>
 
 <p>
-Nyerések:
-<span id="wins">0</span>
+Játék:
+<span id="games">
+0
+</span>
 </p>
 
+
 <p>
-Veszteségek:
-<span id="losses">0</span>
+Nyert:
+<span id="wins">
+0
+</span>
 </p>
+
+
+<p>
+Vesztett:
+<span id="losses">
+0
+</span>
+</p>
+
 
 <p>
 RTP:
-<span id="rtp">0</span>%
+<span id="rtp">
+0
+</span>%
 </p>
 
 
 </div>
+
 
 </div>
 
