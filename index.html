@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium European Roulette</title>
+    <title>Premium European Roulette (with Admin Panel)</title>
     <style>
         * {
             box-sizing: border-box;
@@ -31,6 +31,7 @@
             width: 100%;
             max-width: 860px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            position: relative;
         }
 
         header {
@@ -43,21 +44,37 @@
         }
 
         .logo {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             color: #ffd700;
             text-shadow: 2px 2px 4px black;
+            text-align: center;
         }
 
         .info-box {
             background: rgba(0, 0, 0, 0.6);
-            padding: 10px 20px;
+            padding: 10px 15px;
             border-radius: 6px;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 13px;
             border: 1px solid #ffd700;
             letter-spacing: 1px;
+        }
+
+        .admin-trigger-btn {
+            background: #222;
+            color: #777;
+            border: 1px solid #444;
+            padding: 5px 10px;
+            font-size: 11px;
+            cursor: pointer;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        .admin-trigger-btn:hover {
+            color: #ffd700;
+            border-color: #ffd700;
         }
 
         #balance { color: #4eff82; }
@@ -163,7 +180,7 @@
             box-shadow: 0 6px 14px rgba(0,0,0,0.8);
         }
 
-        /* ATOMBIZTOS RÁCS */
+        /* TÁBLA RÁCS */
         .roulette-table-grid {
             display: grid;
             grid-template-columns: 45px repeat(12, 44px) 55px;
@@ -211,7 +228,6 @@
             font-size: 13px;
         }
 
-        /* Romuszok a színekhez */
         .red-diamond::before {
             content: "";
             width: 18px;
@@ -229,7 +245,6 @@
             border: 1px solid white;
         }
 
-        /* Tét zseton grafika a mezőkön */
         .cell::after {
             content: attr(data-total-bet);
             position: absolute;
@@ -263,16 +278,104 @@
             font-size: 13px;
             cursor: pointer;
             font-weight: bold;
-            transition: background 0.2s;
         }
         #clear-btn:hover { background-color: #732121; }
+
+        /* --- ADMIN PANEL MODAL MODUL STÍLUSOK --- */
+        .admin-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 100;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .admin-modal {
+            background: #111;
+            border: 3px solid #ffd700;
+            border-radius: 12px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            text-align: center;
+        }
+
+        .admin-modal h2 {
+            color: #ffd700;
+            margin-bottom: 20px;
+            font-size: 22px;
+            letter-spacing: 1px;
+        }
+
+        .admin-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .admin-group label {
+            display: block;
+            font-size: 13px;
+            color: #aaa;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        .admin-modal input[type="password"],
+        .admin-modal input[type="number"],
+        .admin-modal select {
+            width: 100%;
+            padding: 10px;
+            background: #222;
+            border: 1px solid #444;
+            color: white;
+            border-radius: 6px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .admin-modal input:focus, .admin-modal select:focus {
+            border-color: #ffd700;
+        }
+
+        .admin-btn {
+            width: 100%;
+            padding: 12px;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 15px;
+        }
+
+        .btn-gold { background: linear-gradient(#ffd700, #d4af37); color: black; }
+        .btn-close { background: #333; color: white; margin-top: 15px; }
+        .btn-close:hover { background: #444; }
+
+        .admin-error {
+            color: #ff4a4a;
+            font-size: 13px;
+            margin-top: 10px;
+            display: none;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
+
     <div class="casino-container">
         <header>
             <div class="info-box">EGYENLEG: <span id="balance">10000</span> €</div>
-            <div class="logo">PREMIUM EUROPEAN ROULETTE</div>
+            <div class="logo">
+                PREMIUM EUROPEAN ROULETTE<br>
+                <button class="admin-trigger-btn" id="open-admin-btn">ADMIN LOGIN</button>
+            </div>
             <div class="info-box">ÖSSZES TÉT: <span id="total-bet">0</span> €</div>
         </header>
 
@@ -363,7 +466,48 @@
         </main>
     </div>
 
+    <!-- --- ADMIN PANEL OVERLAY HTML --- -->
+    <div class="admin-overlay" id="admin-overlay">
+        <!-- 1. FÁZIS: Jelszó kérő panel -->
+        <div class="admin-modal" id="admin-login-box">
+            <h2>TITKOS ADMIN BELÉPÉS</h2>
+            <div class="admin-group">
+                <label>Add meg a biztonsági kódot:</label>
+                <input type="password" id="admin-pass-input" placeholder="••••">
+            </div>
+            <div class="admin-error" id="admin-auth-error">Helytelen biztonsági kód!</div>
+            <button class="admin-btn btn-gold" id="admin-login-submit">BELÉPÉS</button>
+            <button class="admin-btn btn-close" id="admin-login-close">MÉGSE</button>
+        </div>
+
+        <!-- 2. FÁZIS: Vezérlőpult (Sikeres belépés után) -->
+        <div class="admin-modal" id="admin-dashboard" style="display: none;">
+            <h2>ADMIN VEZÉRLŐPULT</h2>
+            
+            <!-- Egyenleg manipulálás -->
+            <div class="admin-group">
+                <label>Egyenleg módosítása (€):</label>
+                <input type="number" id="admin-balance-input">
+                <button class="admin-btn btn-gold" id="admin-balance-submit" style="padding: 6px; font-size: 13px; margin-top: 5px;">Módosítás mentése</button>
+            </div>
+
+            <!-- Csalás / Kerék befolyásolása -->
+            <div class="admin-group">
+                <label>Következő nyertes szám:</label>
+                <select id="admin-cheat-select">
+                    <option value="random">TELJESEN VÉLETLENSZERŰ (NORMÁL)</option>
+                    <!-- JavaScript fogja feltölteni a 0-36 számokkal -->
+                </select>
+            </div>
+
+            <button class="admin-btn btn-close" id="admin-dashboard-close">BEZÁRÁS</button>
+        </div>
+    </div>
+
     <script>
+        // --- ADMIN BEÁLLÍTÁS ---
+        const ADMIN_CODE = "Majomka_01"; // Ezt a kódot írhatod át bármire, amire szeretnéd!
+
         const rouletteNumbers = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
         const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
 
@@ -371,6 +515,7 @@
         let currentChipValue = 1;
         let currentBets = {}; 
         let isSpinning = false;
+        let forcedNextNumber = "random"; // Admin által vezérelt változó
 
         const canvas = document.getElementById('wheel');
         const ctx = canvas.getContext('2d');
@@ -386,6 +531,66 @@
         const spinButton = document.getElementById('spin-btn');
         const clearButton = document.getElementById('clear-btn');
 
+        // Admin DOM elemek
+        const adminOverlay = document.getElementById('admin-overlay');
+        const adminLoginBox = document.getElementById('admin-login-box');
+        const adminDashboard = document.getElementById('admin-dashboard');
+        const adminPassInput = document.getElementById('admin-pass-input');
+        const adminAuthError = document.getElementById('admin-auth-error');
+        const adminCheatSelect = document.getElementById('admin-cheat-select');
+        const adminBalanceInput = document.getElementById('admin-balance-input');
+
+        // Töltsük fel az admin dropdown menüt a számokkal automatikusan
+        rouletteNumbers.forEach(num => {
+            const opt = document.createElement('option');
+            opt.value = num;
+            opt.textContent = `FIXEN A(Z): ${num}`;
+            adminCheatSelect.appendChild(opt);
+        });
+
+        // --- ADMIN PANEL NYITÁS/ZÁRÁS LOGIKA ---
+        document.getElementById('open-admin-btn').addEventListener('click', () => {
+            adminPassInput.value = "";
+            adminAuthError.style.display = "none";
+            adminLoginBox.style.display = "block";
+            adminDashboard.style.display = "none";
+            adminOverlay.style.display = "flex";
+        });
+
+        document.getElementById('admin-login-close').addEventListener('click', () => {
+            adminOverlay.style.display = "none";
+        });
+
+        document.getElementById('admin-dashboard-close').addEventListener('click', () => {
+            adminOverlay.style.display = "none";
+            // Elmentjük a kiválasztott csalást
+            forcedNextNumber = adminCheatSelect.value;
+        });
+
+        // Jelszó ellenőrzés
+        document.getElementById('admin-login-submit').addEventListener('click', () => {
+            if (adminPassInput.value === ADMIN_CODE) {
+                adminLoginBox.style.display = "none";
+                adminDashboard.style.display = "block";
+                // Betöltjük az aktuális értékeket a felületre
+                adminBalanceInput.value = balance;
+                adminCheatSelect.value = forcedNextNumber;
+            } else {
+                adminAuthError.style.display = "block";
+            }
+        });
+
+        // Manuális egyenleg mentése az admin panelen
+        document.getElementById('admin-balance-submit').addEventListener('click', () => {
+            const newBal = parseInt(adminBalanceInput.value);
+            if (!isNaN(newBal) && newBal >= 0) {
+                balance = newBal;
+                updateUI();
+                alert(`Egyenleg sikeresen átírva: ${balance} €-ra!`);
+            }
+        });
+
+        // --- JÁTÉK LOGIKA ---
         function normalizeAngle(angle) {
             return ((angle % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
         }
@@ -505,10 +710,19 @@
             isSpinning = true;
             statusMessage.textContent = "BALL IS SPINNING...";
             
-            const winningIndex = Math.floor(Math.random() * rouletteNumbers.length);
+            // --- GENERÁLÁS VAGY ADMIN CSALÁS KIVÁLASZTÁSA ---
+            let winningIndex;
+            if (forcedNextNumber === "random") {
+                winningIndex = Math.floor(Math.random() * rouletteNumbers.length);
+            } else {
+                // Megkeressük az admin által kényszerített szám indexét a keréken
+                winningIndex = rouletteNumbers.indexOf(parseInt(forcedNextNumber));
+            }
+            
             const winningNumber = rouletteNumbers[winningIndex];
             const sliceAngle = (2 * Math.PI) / rouletteNumbers.length;
             
+            // --- Kerék forgás számítás ---
             const currentRotationNormalized = normalizeAngle(currentRotation);
             const targetRotationNormalized = normalizeAngle((1.5 * Math.PI) - (winningIndex * sliceAngle) - (sliceAngle / 2));
             let wheelDelta = targetRotationNormalized - currentRotationNormalized;
@@ -517,6 +731,7 @@
             const startWheelRotation = currentRotation;
             const finalWheelRotation = currentRotation + (4 * 2 * Math.PI) + wheelDelta;
 
+            // --- Golyó forgás számítás ---
             const currentBallAngleNormalized = normalizeAngle(currentBallAngle);
             let ballDelta = currentBallAngleNormalized - (1.5 * Math.PI); 
             if (ballDelta < 0) ballDelta += 2 * Math.PI;
@@ -597,6 +812,9 @@
             } else {
                 statusMessage.innerHTML = `WINNING NUMBER: <strong>${winningNumber} (${colorName})</strong>. YOU LOST.`;
             }
+
+            // Automatikusan visszaállítjuk véletlenszerűre a csalást pörgetés után, hogy ne legyen gyanús!
+            forcedNextNumber = "random";
 
             currentBets = {};
             document.querySelectorAll('.cell').forEach(cell => cell.removeAttribute('data-total-bet'));
