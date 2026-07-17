@@ -1,37 +1,38 @@
-// Európai rulett kerék számainak hivatalos sorrendje
+// Hivatalos Európai Rulett kerék sorrend
 const rouletteNumbers = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
 const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
 
-// Játék állapot változók
 let balance = 10000;
 let currentChipValue = 1;
 let currentBets = {}; 
 let isSpinning = false;
 
-// Forgási és Golyó fizika beállítások
 const canvas = document.getElementById('wheel');
 const ctx = canvas.getContext('2d');
 const radius = canvas.width / 2;
 
 let currentRotation = 0;
-let currentBallAngle = 1.5 * Math.PI; // Fent kezd (a nyílnál)
+let currentBallAngle = 1.5 * Math.PI; // Felső pozíció (12 óra)
 let ballRadius = radius * 0.74;
 
-// DOM Elemek összekötése
 const balanceDisplay = document.getElementById('balance');
 const totalBetDisplay = document.getElementById('total-bet');
 const statusMessage = document.getElementById('status-message');
 const spinButton = document.getElementById('spin-btn');
 const clearButton = document.getElementById('clear-btn');
 
-// Kerék és golyó precíz kirajzolása Canvas-ra
+// Szög normalizáló segédfüggvény [0, 2*PI) közé
+function normalizeAngle(angle) {
+    return ((angle % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+}
+
 function drawWheel() {
     const numSlices = rouletteNumbers.length;
     const sliceAngle = (2 * Math.PI) / numSlices;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    // 1. LÉPÉS: A FORGÓ RUULETTKERÉK RAJZOLÁSA
+    // Kerék kirajzolása
     ctx.save();
     ctx.translate(radius, radius);
     ctx.rotate(currentRotation);
@@ -52,7 +53,6 @@ function drawWheel() {
         ctx.lineWidth = 1;
         ctx.stroke();
 
-        // Számok elhelyezése
         ctx.save();
         ctx.rotate(angle + sliceAngle / 2);
         ctx.fillStyle = 'white';
@@ -62,7 +62,7 @@ function drawWheel() {
         ctx.restore();
     }
     
-    // Kerék belső fa és arany dekorációs körei
+    // Belső fa textúra kör
     ctx.beginPath();
     ctx.arc(0, 0, radius * 0.62, 0, 2 * Math.PI);
     ctx.fillStyle = '#422817';
@@ -78,7 +78,7 @@ function drawWheel() {
 
     ctx.restore();
 
-    // 2. LÉPÉS: A GOLYÓ KISZÁMÍTÁSA (Globális pozíció, nem forog a kerékkel)
+    // Golyó kirajzolása globális koordinátákkal
     ctx.beginPath();
     const ballX = radius + ballRadius * Math.cos(currentBallAngle);
     const ballY = radius + ballRadius * Math.sin(currentBallAngle);
@@ -90,10 +90,9 @@ function drawWheel() {
     ctx.stroke();
 }
 
-// Kezdőképernyő kirajzolása
 drawWheel();
 
-// Zseton kiválasztáskezelő
+// Zsetonválasztó
 document.querySelectorAll('.chip').forEach(chip => {
     chip.addEventListener('click', (e) => {
         document.querySelector('.chip.active').classList.remove('active');
@@ -102,17 +101,15 @@ document.querySelectorAll('.chip').forEach(chip => {
     });
 });
 
-// Tét elhelyezés a rácson
+// Fogadások elhelyezése
 document.querySelectorAll('.cell').forEach(cell => {
     cell.addEventListener('click', () => {
         if (isSpinning) return;
-        
         const betType = cell.dataset.bet;
         
         if (balance >= currentChipValue) {
             balance -= currentChipValue;
             currentBets[betType] = (currentBets[betType] || 0) + currentChipValue;
-            
             cell.setAttribute('data-total-bet', currentBets[betType]);
             updateUI();
         } else {
@@ -127,7 +124,6 @@ function updateUI() {
     totalBetDisplay.textContent = totalBet;
 }
 
-// Tétek visszavonása
 clearButton.addEventListener('click', () => {
     if (isSpinning) return;
     for (let key in currentBets) {
@@ -139,7 +135,7 @@ clearButton.addEventListener('click', () => {
     statusMessage.textContent = "BET CLEARED";
 });
 
-// Matematikailag tökéletes szinkronizált pörgetés indítása
+// Pörgetés animáció szögkorrekcióval
 spinButton.addEventListener('click', () => {
     const totalBet = Object.values(currentBets).reduce((a, b) => a + b, 0);
     if (totalBet === 0) {
@@ -156,21 +152,21 @@ spinButton.addEventListener('click', () => {
     const sliceAngle = (2 * Math.PI) / rouletteNumbers.length;
     
     // --- Kerék forgás matek ---
-    const currentRotationNormalized = ((currentRotation % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
-    const baseTargetRotation = (1.5 * Math.PI) - (winningIndex * sliceAngle) - (sliceAngle / 2);
-    let wheelDelta = baseTargetRotation - currentRotationNormalized;
+    const currentRotationNormalized = normalizeAngle(currentRotation);
+    const targetRotationNormalized = normalizeAngle((1.5 * Math.PI) - (winningIndex * sliceAngle) - (sliceAngle / 2));
+    let wheelDelta = targetRotationNormalized - currentRotationNormalized;
     if (wheelDelta < 0) wheelDelta += 2 * Math.PI;
     
     const startWheelRotation = currentRotation;
     const finalWheelRotation = currentRotation + (4 * 2 * Math.PI) + wheelDelta;
 
-    // --- Golyó forgás matek (szintén a nyílnál, azaz 1.5 * PI-nél áll meg) ---
-    const currentBallAngleNormalized = ((currentBallAngle % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
-    let ballDelta = currentBallAngleNormalized - 1.5 * Math.PI;
+    // --- Golyó forgás matek ---
+    const currentBallAngleNormalized = normalizeAngle(currentBallAngle);
+    let ballDelta = currentBallAngleNormalized - (1.5 * Math.PI); // Mindig a felső nyílnál áll meg
     if (ballDelta < 0) ballDelta += 2 * Math.PI;
     
     const startBallAngle = currentBallAngle;
-    const finalBallAngle = currentBallAngle - (6 * 2 * Math.PI) - ballDelta; // Ellenkező irányba megy
+    const finalBallAngle = currentBallAngle - (6 * 2 * Math.PI) - ballDelta; // Ellentétes irány
 
     const outerRadius = radius - 15;
     const innerRadius = radius * 0.74;
@@ -183,13 +179,11 @@ spinButton.addEventListener('click', () => {
         const progress = timestamp - startTime;
         const t = Math.min(progress / duration, 1);
         
-        // Sima lassulás
         const easeOut = 1 - Math.pow(1 - t, 3);
         
         currentRotation = startWheelRotation + (finalWheelRotation - startWheelRotation) * easeOut;
         currentBallAngle = startBallAngle + (finalBallAngle - startBallAngle) * easeOut;
         
-        // Golyó besüllyedése az animáció végén
         if (t < 0.6) {
             ballRadius = outerRadius;
         } else {
@@ -211,7 +205,7 @@ spinButton.addEventListener('click', () => {
     requestAnimationFrame(animate);
 });
 
-// Komplex Kaszinó kiértékelő algoritmus az összes új mezőhöz
+// Kijavított, atombiztos kiértékelés (Nincs több parseInt hiba)
 function evaluateResults(winningNumber) {
     let totalWon = 0;
     const isRed = redNumbers.includes(winningNumber);
@@ -224,24 +218,24 @@ function evaluateResults(winningNumber) {
     for (let bet in currentBets) {
         const amount = currentBets[bet];
         
-        // 1. Tiszta szám eltalálása (35:1 kifizetés + tét vissza)
-        if (parseInt(bet) === winningNumber) {
+        // 1. Tiszta szám fogadások ellenőrzése (Kizárólag ha valódi szám a string)
+        if (!isNaN(bet) && Number(bet) === winningNumber) {
             totalWon += amount * 36;
         }
-        // 2. Szín fogadások (1:1)
+        // 2. Színek (1:1)
         else if (bet === 'red' && isRed && winningNumber !== 0) totalWon += amount * 2;
         else if (bet === 'black' && !isRed && winningNumber !== 0) totalWon += amount * 2;
         // 3. Páros / Páratlan (1:1)
         else if (bet === 'even' && isEven) totalWon += amount * 2;
         else if (bet === 'odd' && isOdd) totalWon += amount * 2;
-        // 4. Kis / Nagy számok (1:1)
+        // 4. Kis / Nagy (1:1)
         else if (bet === '1-18' && winningNumber >= 1 && winningNumber <= 18) totalWon += amount * 2;
         else if (bet === '19-36' && winningNumber >= 19 && winningNumber <= 36) totalWon += amount * 2;
-        // 5. Tucatok (2:1 kifizetés)
+        // 5. Tucatok (2:1)
         else if (bet === 'doz_1' && winningNumber >= 1 && winningNumber <= 12) totalWon += amount * 3;
         else if (bet === 'doz_2' && winningNumber >= 13 && winningNumber <= 24) totalWon += amount * 3;
         else if (bet === 'doz_3' && winningNumber >= 25 && winningNumber <= 36) totalWon += amount * 3;
-        // 6. Oszlopok (2:1 kifizetés)
+        // 6. Oszlopok (2:1)
         else if (bet === 'col_3' && winningNumber % 3 === 0 && winningNumber !== 0) totalWon += amount * 3;
         else if (bet === 'col_2' && winningNumber % 3 === 2) totalWon += amount * 3;
         else if (bet === 'col_1' && winningNumber % 3 === 1) totalWon += amount * 3;
@@ -255,7 +249,6 @@ function evaluateResults(winningNumber) {
         statusMessage.innerHTML = `WINNING NUMBER: <strong>${winningNumber} (${colorName})</strong>. YOU LOST.`;
     }
 
-    // Tisztítás a következő körhöz
     currentBets = {};
     document.querySelectorAll('.cell').forEach(cell => cell.removeAttribute('data-total-bet'));
     updateUI();
