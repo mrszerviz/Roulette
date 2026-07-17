@@ -1,195 +1,225 @@
-body{
-
-margin:0;
-
-background:
-radial-gradient(circle,#176b35,#001b08);
-
-font-family:Arial;
-
-color:white;
-
-text-align:center;
-
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    user-select: none;
 }
 
-
-.game{
-
-display:flex;
-
-flex-direction:column;
-
-align-items:center;
-
+body {
+    background-color: #1a1a1a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: white;
 }
 
-
-.wheel-container{
-
-position:relative;
-
-width:500px;
-
-height:500px;
-
+.casino-container {
+    background-color: #0c4122;
+    border: 8px solid #5c3a21;
+    border-radius: 15px;
+    padding: 20px;
+    width: 95%;
+    max-width: 900px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
 }
 
-
-
-#wheel{
-
-border-radius:50%;
-
-box-shadow:
-
-0 40px 80px black;
-
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #072b16;
+    padding-bottom: 10px;
 }
 
-
-
-.pointer{
-
-position:absolute;
-
-top:-15px;
-
-left:235px;
-
-z-index:5;
-
-
-width:0;
-
-height:0;
-
-
-border-left:15px solid transparent;
-
-border-right:15px solid transparent;
-
-border-top:40px solid gold;
-
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    color: #e5c158;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
 }
 
-
-
-.panel{
-
-margin-top:30px;
-
-background:#111;
-
-padding:25px;
-
-border-radius:20px;
-
-max-width:650px;
-
+.info-box {
+    background: rgba(0, 0, 0, 0.5);
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    border: 1px solid #e5c158;
 }
 
+#balance { color: #58e57c; }
+#total-bet { color: #e5cd58; }
 
-
-button,select{
-
-padding:10px;
-
-margin:5px;
-
-border-radius:8px;
-
-border:2px solid gold;
-
-background:#222;
-
-color:white;
-
-cursor:pointer;
-
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
 }
 
-
-
-button:hover{
-
-transform:scale(1.05);
-
+/* Kerék dizájn */
+.wheel-section {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-
-.active{
-
-background:gold!important;
-
-color:black;
-
+.pointer {
+    position: absolute;
+    top: -10px;
+    font-size: 24px;
+    color: #ffcc00;
+    z-index: 10;
+    text-shadow: 0 2px 5px black;
 }
 
-
-
-#numbers{
-
-display:grid;
-
-grid-template-columns:repeat(12,1fr);
-
-gap:5px;
-
+#spin-btn {
+    margin-top: 15px;
+    padding: 10px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    background: linear-gradient(#f3d060, #d4af37);
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    transition: transform 0.1s;
 }
 
+#spin-btn:active { transform: scale(0.95); }
 
-
-#numbers button{
-
-width:35px;
-
-height:35px;
-
-padding:0;
-
+#status-message {
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    min-height: 27px;
 }
 
-
-
-.spin{
-
-background:gold;
-
-color:black;
-
-font-size:22px;
-
-padding:15px 50px;
-
+/* Zsetonok */
+.chips-container {
+    display: flex;
+    gap: 15px;
 }
 
-
-
-@media(max-width:600px){
-
-.wheel-container{
-
-width:90vw;
-
-height:90vw;
-
+.chip {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 3px dashed white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+    transition: transform 0.2s;
+    background-color: #0055ff;
 }
 
+.chip[data-value="1"] { background-color: #9c27b0; }
+.chip[data-value="5"] { background-color: #e91e63; }
+.chip[data-value="10"] { background-color: #00bcd4; }
+.chip[data-value="50"] { background-color: #ff9800; }
+.chip[data-value="100"] { background-color: #4caf50; }
 
-#wheel{
-
-width:90vw;
-
-height:90vw;
-
+.chip.active {
+    transform: translateY(-8px);
+    border: 3px solid #ffeb3b;
+    box-shadow: 0 8px 12px rgba(0,0,0,0.6);
 }
 
-
-#numbers{
-
-grid-template-columns:repeat(6,1fr);
-
+/* Tábla dizájn */
+.betting-board {
+    display: flex;
+    background-color: #07381c;
+    padding: 10px;
+    border: 3px solid #145c32;
+    border-radius: 8px;
 }
 
+.numbers-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 50px);
+    grid-template-rows: repeat(3, 45px);
+    gap: 2px;
 }
+
+.cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    transition: background 0.1s;
+}
+
+.cell:hover { background-color: rgba(255,255,255,0.15) !important; }
+
+.red { background-color: #b31212; }
+.black { background-color: #1c1c1c; }
+.green { background-color: #0e7a32; }
+
+.zero {
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 2px solid rgba(255,255,255,0.4);
+}
+
+.outside-bets {
+    grid-column: span 12;
+    display: flex;
+    height: 45px;
+    margin-top: 4px;
+    gap: 2px;
+    width: 100%;
+}
+
+.numbers-grid { margin-bottom: 2px; }
+.betting-board { flex-direction: column; }
+
+.outside {
+    flex: 1;
+    background-color: #094724;
+    font-size: 13px;
+}
+
+/* Ráhelyezett tét jelző (zseton a mezőn) */
+.cell::after {
+    content: attr(data-total-bet);
+    position: absolute;
+    display: none;
+    width: 24px;
+    height: 24px;
+    background-color: #ffcc00;
+    color: black;
+    border-radius: 50%;
+    font-size: 11px;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    font-weight: bold;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 4px black;
+}
+
+.cell[data-total-bet]::after { display: flex; }
+
+#clear-btn {
+    padding: 6px 15px;
+    background: #5c1d1d;
+    color: white;
+    border: 1px solid #7a2626;
+    border-radius: 4px;
+    cursor: pointer;
+}
+#clear-btn:hover { background: #7a2626; }
