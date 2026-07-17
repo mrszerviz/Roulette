@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roulette Simulator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>🎰 Roulette Simulator</h1>
+
+    <div class="wheel">
+        <div id="number">?</div>
+    </div>
+
+    <h2>Válassz tétet</h2>
+
+    <div class="bets">
+        <button onclick="placeBet('red')">🔴 Piros</button>
+        <button onclick="placeBet('black')">⚫ Fekete</button>
+        <button onclick="placeBet('even')">Páros</button>
+        <button onclick="placeBet('odd')">Páratlan</button>
+    </div>
+
+    <button class="spin" onclick="spin()">PÖRGETÉS</button>
+
+    <h3 id="result"></h3>
+
+    <p>Egyenleg: <span id="money">1000</span> Ft</p>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
