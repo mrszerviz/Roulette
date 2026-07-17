@@ -1,194 +1,329 @@
-let money = 1000;
+const canvas = document.getElementById("wheel");
+const ctx = canvas.getContext("2d");
 
 
-let currentAmount = 100;
+const center = 250;
+const radius = 220;
 
 
-let bet = null;
+// Európai rulett sorrend
 
-let selectedNumber = null;
-
-
-let games = 0;
-
-let wins = 0;
-
-let losses = 0;
-
-
-let totalBet = 0;
-
-let totalReturn = 0;
-
-
-
-const redNumbers = [
-
-1,3,5,7,9,
-12,14,16,18,
-19,21,23,25,
-27,30,32,34,36
-
+const wheelNumbers = [
+0,32,15,19,4,21,2,25,17,34,
+6,27,13,36,11,30,8,23,10,
+5,24,16,33,1,20,14,31,
+9,22,18,29,7,28,12,35,3,26
 ];
 
 
 
+const redNumbers=[
+32,19,21,25,34,27,
+36,30,23,5,16,1,
+14,20,31,9,18,7,
+12,3
+];
 
-// számgombok létrehozása
+
+
+let angle=0;
+
+let ballAngle=0;
+
+let spinning=false;
+
+
+
+let money=1000;
+
+
+let selectedBet=null;
+
+let selectedNumber=null;
+
+
+let games=0;
+let wins=0;
+let losses=0;
+
+
+
+// ----------------------
+// Kerék rajzolása
+// ----------------------
+
+
+function drawWheel(){
+
+
+ctx.clearRect(
+0,
+0,
+500,
+500
+);
+
+
+
+let slice =
+(Math.PI*2)/wheelNumbers.length;
+
+
+
+for(let i=0;i<wheelNumbers.length;i++){
+
+
+let start =
+angle+i*slice;
+
+
+let end =
+start+slice;
+
+
+
+let number =
+wheelNumbers[i];
+
+
+
+ctx.beginPath();
+
+
+ctx.moveTo(center,center);
+
+
+ctx.arc(
+center,
+center,
+radius,
+start,
+end
+);
+
+
+ctx.fillStyle =
+number===0
+?
+"#008000"
+:
+redNumbers.includes(number)
+?
+"#b00000"
+:
+"#050505";
+
+
+ctx.fill();
+
+
+
+ctx.strokeStyle="#d4af37";
+
+ctx.stroke();
+
+
+
+
+// számok
+
+
+ctx.save();
+
+
+ctx.translate(center,center);
+
+
+ctx.rotate(
+start+slice/2
+);
+
+
+ctx.fillStyle="white";
+
+ctx.font="18px Arial";
+
+
+ctx.fillText(
+number,
+radius-35,
+5
+);
+
+
+ctx.restore();
+
+
+}
+
+
+
+// közép
+
+
+ctx.beginPath();
+
+ctx.arc(
+center,
+center,
+70,
+0,
+Math.PI*2
+);
+
+
+ctx.fillStyle="#ddd";
+
+ctx.fill();
+
+
+ctx.fillStyle="black";
+
+ctx.font="45px Arial";
+
+
+ctx.textAlign="center";
+
+ctx.fillText(
+"0",
+center,
+center+15
+);
+
+
+
+// golyó
+
+let bx =
+center+
+Math.cos(ballAngle)
+*190;
+
+
+let by =
+center+
+Math.sin(ballAngle)
+*190;
+
+
+
+ctx.beginPath();
+
+ctx.arc(
+bx,
+by,
+12,
+0,
+Math.PI*2
+);
+
+
+ctx.fillStyle="white";
+
+ctx.fill();
+
+
+}
+
+
+
+drawWheel();
+
+
+
+// ----------------------
+// Számgombok
+// ----------------------
+
 
 const numbers =
 document.getElementById("numbers");
 
 
-for(let i=1;i<=36;i++){
+for(let i=0;i<=36;i++){
 
 
-let button =
+let b =
 document.createElement("button");
 
 
-button.innerHTML=i;
+b.innerHTML=i;
 
 
-button.onclick=function(){
+b.onclick=function(){
 
-chooseNumber(i);
+selectedNumber=i;
+
+selectedBet=null;
+
+updateSelected(
+"Szám: "+i
+);
+
 
 };
 
 
-numbers.appendChild(button);
-
-
-}
-
-
-
-
-function changeAmount(){
-
-
-currentAmount =
-Number(
-document.getElementById("amount").value
-);
-
-
-document.getElementById("currentAmount")
-.innerHTML=currentAmount;
-
+numbers.appendChild(b);
 
 }
 
 
 
+// ----------------------
+// Külső fogadások
+// ----------------------
 
 
-function chooseNumber(number){
+function colorBet(type){
 
 
-selectedNumber=number;
-
-bet=null;
-
-
-clearButtons();
-
-
-event.target.classList.add("active");
-
-
-
-document.getElementById("message")
-.innerHTML=
-"Szám fogadás: "
-+number+
-" | Tét: "
-+currentAmount+
-" Ft";
-
-
-}
-
-
-
-
-function setBet(type,button){
-
-
-bet=type;
+selectedBet=type;
 
 selectedNumber=null;
 
 
-clearButtons();
-
-
-button.classList.add("active");
-
-
-
-document.getElementById("message")
-.innerHTML=
-"Fogadás: "
-+type+
-" | Tét: "
-+currentAmount+
-" Ft";
+updateSelected(type);
 
 
 }
 
 
 
+function updateSelected(text){
 
 
-function clearButtons(){
-
-
-document.querySelectorAll("button")
-.forEach(btn=>{
-
-btn.classList.remove("active");
-
-});
+document.getElementById(
+"selectedBet"
+)
+.innerHTML=text;
 
 
 }
 
 
 
-
-
-function getColor(number){
-
-
-if(number===0)
-
-return "green";
-
-
-if(redNumbers.includes(number))
-
-return "red";
-
-
-return "black";
-
-
-}
-
-
-
+// ----------------------
+// Pörgetés
+// ----------------------
 
 
 function spin(){
 
 
+if(spinning)
+return;
 
-if(!bet && selectedNumber===null){
 
-alert("Válassz fogadást!");
+
+if(
+!selectedBet &&
+selectedNumber===null
+){
+
+alert(
+"Válassz fogadást!"
+);
 
 return;
 
@@ -196,9 +331,20 @@ return;
 
 
 
-if(money<currentAmount){
+let betAmount =
+Number(
+document.getElementById(
+"betAmount"
+).value
+);
 
-alert("Nincs elég pénz!");
+
+
+if(money<betAmount){
+
+alert(
+"Nincs elég pénz!"
+);
 
 return;
 
@@ -206,51 +352,155 @@ return;
 
 
 
+money-=betAmount;
 
-money-=currentAmount;
-
-totalBet+=currentAmount;
 
 games++;
 
 
-
-let wheel =
-document.getElementById("wheel");
+spinning=true;
 
 
 
-let rotation =
-Math.floor(Math.random()*7200)+1440;
-
-
-wheel.style.transform =
-`rotate(${rotation}deg)`;
-
-
-
-let result =
-Math.floor(Math.random()*37);
+let winnerIndex =
+Math.floor(
+Math.random()
+*
+wheelNumbers.length
+);
 
 
 
-setTimeout(function(){
+
+let targetAngle =
+(
+Math.PI*2
+*
+winnerIndex
+/
+wheelNumbers.length
+);
 
 
 
-document.getElementById("resultNumber")
-.innerHTML=result;
+let startAngle=angle;
+
+
+let totalRotation =
+Math.PI*2*8
++
+targetAngle;
+
+
+
+let start =
+performance.now();
+
+
+
+function animate(time){
+
+
+
+let progress =
+(time-start)/5000;
+
+
+
+if(progress>1)
+progress=1;
+
+
+
+let ease =
+1-Math.pow(
+1-progress,
+4
+);
+
+
+
+angle =
+startAngle+
+totalRotation*
+ease;
+
+
+
+ballAngle =
+angle*1.3
++
+progress*20;
+
+
+
+drawWheel();
+
+
+
+if(progress<1){
+
+requestAnimationFrame(
+animate
+);
+
+}
+
+else{
+
+
+finishSpin(
+wheelNumbers[winnerIndex],
+betAmount
+);
+
+
+}
+
+
+}
+
+
+
+requestAnimationFrame(
+animate
+);
+
+
+
+}
+
+
+
+// ----------------------
+// Eredmény
+// ----------------------
+
+
+function finishSpin(number,amount){
+
+
+spinning=false;
 
 
 
 let win=false;
+
 
 let multiplier=0;
 
 
 
 let color =
-getColor(result);
+number===0
+?
+"green"
+:
+redNumbers.includes(number)
+?
+"red"
+:
+"black";
 
 
 
@@ -258,7 +508,7 @@ getColor(result);
 
 if(selectedNumber!==null){
 
-if(result===selectedNumber){
+if(number===selectedNumber){
 
 win=true;
 
@@ -270,19 +520,8 @@ multiplier=35;
 
 
 
-
-
-if(bet==="red" && color==="red"){
-
-win=true;
-
-multiplier=1;
-
-}
-
-
-
-if(bet==="black" && color==="black"){
+if(selectedBet==="red"
+&& color==="red"){
 
 win=true;
 
@@ -292,7 +531,8 @@ multiplier=1;
 
 
 
-if(bet==="even" && result!==0 && result%2===0){
+if(selectedBet==="black"
+&& color==="black"){
 
 win=true;
 
@@ -302,7 +542,9 @@ multiplier=1;
 
 
 
-if(bet==="odd" && result!==0 && result%2!==0){
+if(selectedBet==="even"
+&& number!==0
+&& number%2===0){
 
 win=true;
 
@@ -311,6 +553,16 @@ multiplier=1;
 }
 
 
+
+if(selectedBet==="odd"
+&& number!==0
+&& number%2!==0){
+
+win=true;
+
+multiplier=1;
+
+}
 
 
 
@@ -318,22 +570,23 @@ if(win){
 
 
 let prize =
-currentAmount*(multiplier+1);
+amount*(multiplier+1);
 
 
 money+=prize;
 
 
-totalReturn+=prize;
-
-
 wins++;
 
 
-document.getElementById("message")
+document.getElementById(
+"message"
+)
 .innerHTML=
-"🎉 NYERTÉL! +"
-+prize+
+"🎉 Nyertél! "+
+number+
+" +"+
+prize+
 " Ft";
 
 
@@ -345,67 +598,53 @@ else{
 losses++;
 
 
-document.getElementById("message")
+document.getElementById(
+"message"
+)
 .innerHTML=
-"❌ Vesztettél! "
-+result+
-" ("+color+")";
+"❌ Vesztettél! "+
+number+
+" ("+
+color+
+")";
 
 
 }
 
 
 
-update();
-
-
-
-},5000);
-
+updateStats();
 
 
 }
 
 
 
+function updateStats(){
 
 
-
-
-function update(){
-
-
-document.getElementById("money")
+document.getElementById(
+"money"
+)
 .innerHTML=money;
 
 
-document.getElementById("games")
+document.getElementById(
+"games"
+)
 .innerHTML=games;
 
 
-document.getElementById("wins")
+document.getElementById(
+"wins"
+)
 .innerHTML=wins;
 
 
-document.getElementById("losses")
+document.getElementById(
+"losses"
+)
 .innerHTML=losses;
-
-
-
-let rtp=0;
-
-
-if(totalBet>0){
-
-rtp =
-(totalReturn/totalBet)*100;
-
-}
-
-
-document.getElementById("rtp")
-.innerHTML=
-rtp.toFixed(2);
 
 
 }
